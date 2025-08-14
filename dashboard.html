@@ -123,23 +123,38 @@
     <section class="services" id="services">
         <div class="container">
             <!-- National Services Section -->
-            <h2>National Services</h2>
-            <p class="section-subtitle">Services available across all states</p>
-            <div class="services-grid" id="nationalServicesGrid">
-                <!-- National services will be loaded here by JavaScript -->
+            <div class="services-section">
+                <div class="section-header" onclick="toggleNationalServices()">
+                    <h2>National Services</h2>
+                    <p class="section-subtitle">Services available across all states</p>
+                    <button class="toggle-btn" id="nationalToggleBtn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="services-grid" id="nationalServicesGrid" style="display: block;">
+                    <!-- National services will be loaded here by JavaScript -->
+                </div>
             </div>
 
             <!-- State Services Section -->
-            <h2>State-Specific Services</h2>
-            <p class="section-subtitle">Services specific to <span id="currentState">your selected state</span></p>
-            <div class="services-filter">
-                <button class="filter-btn active" data-filter="all">All Services</button>
-                <button class="filter-btn" data-filter="popular">Most Popular</button>
-                <button class="filter-btn" data-filter="recent">Recently Used</button>
-                <button class="filter-btn" data-filter="favorites">Favorites</button>
+            <div class="services-section">
+                <div class="section-header" onclick="toggleStateServices()">
+                    <h2>State-Specific Services</h2>
+                    <p class="section-subtitle">Services specific to <span id="currentState">your selected state</span></p>
+                    <button class="toggle-btn" id="stateToggleBtn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="services-filter" id="stateServicesFilter" style="display: block;">
+                    <button class="filter-btn active" data-filter="all">All Services</button>
+                    <button class="filter-btn" data-filter="popular">Most Popular</button>
+                    <button class="filter-btn" data-filter="recent">Recently Used</button>
+                    <button class="filter-btn" data-filter="favorites">Favorites</button>
+                </div>
+                <div class="services-grid" id="stateServicesGrid" style="display: block;">
+                    <!-- State-specific services will be loaded here by JavaScript -->
+                </div>
             </div>
-            <div class="services-grid" id="stateServicesGrid">
-                <!-- State-specific services will be loaded here by JavaScript -->
             </div>
         </div>
     </section>
