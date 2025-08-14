@@ -79,13 +79,19 @@ function initializeServiceLinks() {
     
     // Remove any existing event listeners first
     if (nationalGrid) {
+        console.log('Setting up national services event delegation');
         nationalGrid.removeEventListener('click', handleServiceClick);
         nationalGrid.addEventListener('click', handleServiceClick);
+    } else {
+        console.error('National services grid not found');
     }
     
     if (stateGrid) {
+        console.log('Setting up state services event delegation');
         stateGrid.removeEventListener('click', handleServiceClick);
         stateGrid.addEventListener('click', handleServiceClick);
+    } else {
+        console.error('State services grid not found');
     }
     
     console.log('Service link event delegation initialized');
@@ -93,16 +99,32 @@ function initializeServiceLinks() {
 
 // Handle service link clicks using event delegation
 function handleServiceClick(e) {
-    // Check if clicked element is a service link
-    const link = e.target.closest('.service-list a');
-    if (!link) return;
+    console.log('Click detected:', e.target);
+    console.log('Target tagName:', e.target.tagName);
+    console.log('Target classes:', e.target.className);
+    
+    // Check if clicked element is a service link or within a service card
+    const link = e.target.closest('a[data-service-url]') || e.target.closest('.service-card a');
+    console.log('Found link:', link);
+    
+    if (!link) {
+        console.log('No service link found');
+        return;
+    }
     
     e.preventDefault();
     const serviceName = link.getAttribute('data-service-name') || link.textContent.trim();
     const serviceUrl = link.getAttribute('data-service-url') || '#';
     
     console.log(`Service clicked: ${serviceName} -> ${serviceUrl}`);
-    showServiceModal(serviceName, serviceUrl);
+    
+    // If it's a valid URL, show modal, otherwise show error
+    if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
+        showServiceModal(serviceName, serviceUrl);
+    } else {
+        console.error('Invalid service URL:', serviceUrl);
+        showNotification('Service URL not available', 'error');
+    }
 }
 
 // Update dashboard statistics
