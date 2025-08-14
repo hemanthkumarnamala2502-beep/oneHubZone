@@ -23,6 +23,15 @@
                     <a href="#" class="nav-link">My Applications</a>
                     <a href="#" class="nav-link">Profile</a>
                 </nav>
+                <div class="state-selector">
+                    <label for="stateSelect">State:</label>
+                    <select id="stateSelect" class="state-dropdown">
+                        <option value="telangana">Telangana</option>
+                        <option value="tamilnadu">Tamil Nadu</option>
+                        <option value="andhrapradesh">Andhra Pradesh</option>
+                        <option value="maharashtra">Maharashtra</option>
+                    </select>
+                </div>
                 <div class="header-actions">
                     <div class="user-info">
                         <span class="user-name" id="userName">Loading...</span>
@@ -43,6 +52,10 @@
             <div class="hero-content">
                 <h1>Welcome to Your Dashboard</h1>
                 <p>Access all citizen services securely from your personalized portal.</p>
+                <div class="state-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Currently viewing services for: <strong id="currentState">Telangana</strong></span>
+                </div>
                 <div class="dashboard-stats">
                     <div class="stat-card">
                         <i class="fas fa-file-alt"></i>

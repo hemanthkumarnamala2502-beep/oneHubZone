@@ -558,6 +558,69 @@ body {
     box-shadow: var(--shadow-md);
 }
 
+/* State Selector Styles */
+.state-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 1rem;
+}
+
+.state-selector label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.state-dropdown {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--background-white);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.state-dropdown:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.state-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    padding: 1rem 1.5rem;
+    color: white;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.state-info i {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.state-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-content {
@@ -566,36 +629,36 @@ body {
         text-align: center;
     }
 
+    .state-selector {
+        order: 1;
+        justify-content: center;
+    }
+
     .nav {
+        order: 2;
         gap: 1rem;
     }
 
-    .hero-content h1 {
-        font-size: 2rem;
+    .header-actions {
+        order: 3;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
     }
 
-    .hero-content p {
-        font-size: 1rem;
+    .user-info {
+        align-items: center;
+        margin-right: 0;
     }
 
-    .search-box {
-        flex-direction: column;
-        gap: 0.5rem;
+    .state-info {
+        font-size: 0.75rem;
+        padding: 0.75rem 1rem;
     }
 
-    .services h2,
-    .quick-actions h2,
-    .emergency-services h2 {
-        font-size: 2rem;
-    }
-
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .quick-actions-grid,
-    .emergency-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    .state-badge {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.5rem;
     }
 }
 
@@ -621,6 +684,16 @@ body {
 
     .category-header {
         padding: 1rem;
+    }
+
+    .state-selector {
+        flex-direction: column;
+        gap: 0.25rem;
+        text-align: center;
+    }
+
+    .state-dropdown {
+        width: 200px;
     }
 }
 
