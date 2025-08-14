@@ -846,13 +846,11 @@ function switchState(newState) {
     
     currentState = newState;
     
-    // Update current state display
-    if (currentStateDisplay) {
-        currentStateDisplay.textContent = stateServicesData[newState].name;
-    }
+    // Load state services
+    loadStateServices(newState);
     
-    // Update services display
-    updateServicesForState(newState);
+    // Update state display
+    updateStateDisplay();
     
     // Show notification
     showNotification(`Switched to ${stateServicesData[newState].name} services`, 'success');
@@ -983,6 +981,47 @@ function loadNationalServices() {
     initializeNationalServiceLinks();
 }
 
+// Load State Services for current state
+function loadStateServices(stateKey) {
+    const stateGrid = document.getElementById('stateServicesGrid');
+    if (!stateGrid || !stateServicesData[stateKey]) return;
+
+    stateGrid.innerHTML = '';
+
+    Object.keys(stateServicesData[stateKey].services).forEach(categoryName => {
+        const services = stateServicesData[stateKey].services[categoryName];
+        
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'service-category';
+        
+        const categoryIcon = getCategoryIcon(categoryName);
+        categoryDiv.innerHTML = `
+            <div class="category-header">
+                <i class="fas ${categoryIcon}"></i>
+                <h3>${categoryName}</h3>
+            </div>
+            <ul class="service-list">
+                ${services.map(service => `
+                    <li>
+                        <a href="#" data-service-name="${service.name}" data-service-url="${service.url}">
+                            <i class="fas ${service.icon}"></i> 
+                            ${service.name}
+                        </a>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+        stateGrid.appendChild(categoryDiv);
+    });
+
+    // Update current state display
+    const currentStateSpan = document.getElementById('currentState');
+    if (currentStateSpan) {
+        currentStateSpan.textContent = stateServicesData[stateKey].name;
+    }
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Check authentication first
@@ -1006,7 +1045,10 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.animationDelay = `${index * 0.1}s`;
     });
     
-    // Load saved state preference
+    // Load national services
+    loadNationalServices();
+    
+    // Load saved state preference (this will also load state services)
     loadStatePreference();
 });
 
