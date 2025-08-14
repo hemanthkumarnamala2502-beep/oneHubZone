@@ -458,7 +458,7 @@ telangana: {
         { "name": "Housing Board Services", "icon": "fa-building", "url": "https://www.tnhb.tn.gov.in/online-services.html" }
       ]
     }
-  }
+  },
   "andhrapradesh": {
     "name": "Andhra Pradesh",
     "services": {
@@ -495,8 +495,7 @@ telangana: {
         { "name": "Housing Board Services", "icon": "fa-building", "url": "https://apshcl.ap.gov.in/" }
       ]
     }
-  }
- 
+  },
   "maharashtra": {
     "name": "Maharashtra",
     "services": {
@@ -852,8 +851,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load services after a short delay to ensure DOM is ready
     setTimeout(() => {
         console.log('Loading services...');
+        console.log('National services data:', nationalServices);
+        console.log('State services data:', stateServicesData);
+        
         loadNationalServices();
         loadStatePreference();
+        
+        // Force load services if they didn't load automatically
+        setTimeout(() => {
+            const nationalGrid = document.getElementById('nationalServicesGrid');
+            const stateGrid = document.getElementById('stateServicesGrid');
+            
+            if (nationalGrid && nationalGrid.children.length === 0) {
+                console.log('National services not loaded, forcing reload...');
+                loadNationalServices();
+            }
+            
+            if (stateGrid && stateGrid.children.length === 0) {
+                console.log('State services not loaded, forcing reload...');
+                loadStateServices('telangana');
+            }
+        }, 1000);
     }, 200);
 });
 
