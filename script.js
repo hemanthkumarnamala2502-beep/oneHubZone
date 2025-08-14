@@ -1,0 +1,569 @@
+// DOM Elements
+const searchInput = document.querySelector('.search-box input');
+const searchBtn = document.querySelector('.search-btn');
+const serviceLinks = document.querySelectorAll('.service-list a');
+const quickActionCards = document.querySelectorAll('.quick-action-card');
+const emergencyCards = document.querySelectorAll('.emergency-card');
+const userNameElement = document.getElementById('userName');
+const userIdElement = document.getElementById('userId');
+const logoutBtn = document.getElementById('logoutBtn');
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+// Authentication check
+function checkAuthentication() {
+    const userSession = localStorage.getItem('userSession') || sessionStorage.getItem('userSession');
+    
+    if (!userSession) {
+        window.location.href = 'login.html';
+        return null;
+    }
+    
+    const userData = JSON.parse(userSession);
+    const loginTime = new Date(userData.loginTime);
+    const currentTime = new Date();
+    const timeDiff = (currentTime - loginTime) / 1000 / 60; // in minutes
+    
+    // Check if session is still valid (30 minutes)
+    if (timeDiff > 30) {
+        // Session expired
+        localStorage.removeItem('userSession');
+        sessionStorage.removeItem('userSession');
+        alert('Your session has expired. Please sign in again.');
+        window.location.href = 'login.html';
+        return null;
+    }
+    
+    return userData;
+}
+
+// Initialize dashboard with user data
+function initializeDashboard() {
+    const userData = checkAuthentication();
+    if (!userData) return;
+    
+    // Update user info in header
+    if (userNameElement) {
+        userNameElement.textContent = userData.name || 'User';
+    }
+    if (userIdElement) {
+        userIdElement.textContent = `ID: ${userData.id}`;
+    }
+    
+    // Generate random dashboard stats
+    updateDashboardStats();
+    
+    // Show welcome message
+    showNotification(`Welcome back, ${userData.name}!`, 'success');
+}
+
+// Update dashboard statistics
+function updateDashboardStats() {
+    const activeApplicationsElement = document.getElementById('activeApplications');
+    const pendingApprovalsElement = document.getElementById('pendingApprovals');
+    const completedServicesElement = document.getElementById('completedServices');
+    
+    // Simulate realistic data
+    const stats = {
+        active: Math.floor(Math.random() * 5) + 1,
+        pending: Math.floor(Math.random() * 3) + 1,
+        completed: Math.floor(Math.random() * 10) + 5
+    };
+    
+    if (activeApplicationsElement) {
+        animateNumber(activeApplicationsElement, stats.active);
+    }
+    if (pendingApprovalsElement) {
+        animateNumber(pendingApprovalsElement, stats.pending);
+    }
+    if (completedServicesElement) {
+        animateNumber(completedServicesElement, stats.completed);
+    }
+}
+
+// Animate numbers
+function animateNumber(element, target) {
+    let current = 0;
+    const increment = target / 20;
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            element.textContent = target;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, 50);
+}
+
+// Logout functionality
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('userSession');
+            sessionStorage.removeItem('userSession');
+            showNotification('Logged out successfully', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+    });
+}
+
+// Service filter functionality
+if (filterBtns.length > 0) {
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterBtns.forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            filterServices(filter);
+        });
+    });
+}
+
+// Filter services based on category
+function filterServices(filter) {
+    const serviceCategories = document.querySelectorAll('.service-category');
+    
+    serviceCategories.forEach(category => {
+        switch(filter) {
+            case 'all':
+                category.style.display = 'block';
+                break;
+            case 'popular':
+                // Show only first 4 categories as "popular"
+                const index = Array.from(serviceCategories).indexOf(category);
+                category.style.display = index < 4 ? 'block' : 'none';
+                break;
+            case 'recent':
+                // Show random 3 categories as "recent"
+                category.style.display = Math.random() > 0.5 ? 'block' : 'none';
+                break;
+            case 'favorites':
+                // Show only first 3 categories as "favorites"
+                const favIndex = Array.from(serviceCategories).indexOf(category);
+                category.style.display = favIndex < 3 ? 'block' : 'none';
+                break;
+        }
+    });
+    
+    showNotification(`Showing ${filter === 'all' ? 'all' : filter} services`, 'info');
+}
+
+// Search functionality
+function performSearch() {
+    const query = searchInput.value.toLowerCase().trim();
+    
+    if (query === '') {
+        alert('Please enter a search term');
+        return;
+    }
+    
+    // Filter services based on search query
+    let foundServices = [];
+    
+    serviceLinks.forEach(link => {
+        const serviceName = link.textContent.toLowerCase();
+        const serviceCategory = link.closest('.service-category').querySelector('.category-header h3').textContent.toLowerCase();
+        
+        if (serviceName.includes(query) || serviceCategory.includes(query)) {
+            foundServices.push({
+                name: link.textContent.trim(),
+                category: serviceCategory,
+                element: link
+            });
+        }
+    });
+    
+    if (foundServices.length > 0) {
+        // Highlight found services
+        highlightSearchResults(foundServices);
+        
+        // Scroll to first result
+        foundServices[0].element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+        
+        showNotification(`Found ${foundServices.length} service(s) matching "${query}"`);
+    } else {
+        showNotification(`No services found for "${query}"`);
+    }
+}
+
+// Highlight search results
+function highlightSearchResults(results) {
+    // Clear previous highlights
+    serviceLinks.forEach(link => {
+        link.style.backgroundColor = '';
+        link.style.transform = '';
+    });
+    
+    // Highlight new results
+    results.forEach(result => {
+        result.element.style.backgroundColor = '#e0f2fe';
+        result.element.style.transform = 'scale(1.02)';
+    });
+    
+    // Remove highlights after 3 seconds
+    setTimeout(() => {
+        results.forEach(result => {
+            result.element.style.backgroundColor = '';
+            result.element.style.transform = '';
+        });
+    }, 3000);
+}
+
+// Show notification
+function showNotification(message) {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    // Create new notification
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        z-index: 1000;
+        animation: slideInRight 0.3s ease-out;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add CSS animations for notifications
+const notificationStyles = document.createElement('style');
+notificationStyles.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(notificationStyles);
+
+// Event Listeners
+searchBtn.addEventListener('click', performSearch);
+
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        performSearch();
+    }
+});
+
+// Service link interactions
+serviceLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const serviceName = link.textContent.trim();
+        showServiceModal(serviceName);
+    });
+});
+
+// Quick action card interactions
+quickActionCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const actionTitle = card.querySelector('h3').textContent;
+        showActionModal(actionTitle);
+    });
+    
+    // Add hover sound effect (optional)
+    card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-5px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(-5px) scale(1)';
+    });
+});
+
+// Emergency card interactions
+emergencyCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const phoneNumber = card.querySelector('.phone-number').textContent;
+        const serviceName = card.querySelector('h3').textContent;
+        
+        if (confirm(`Call ${serviceName} at ${phoneNumber}?`)) {
+            // In a real app, this would initiate a phone call
+            window.open(`tel:${phoneNumber}`, '_blank');
+        }
+    });
+});
+
+// Service Modal
+function showServiceModal(serviceName) {
+    const modal = createModal(`
+        <div style="text-align: center; padding: 2rem;">
+            <i class="fas fa-info-circle" style="font-size: 3rem; color: #2563eb; margin-bottom: 1rem;"></i>
+            <h2 style="margin-bottom: 1rem; color: #1e293b;">${serviceName}</h2>
+            <p style="margin-bottom: 2rem; color: #64748b;">
+               To apply for ${serviceName}, you will need to provide required documents and follow the application process.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="startApplication('${serviceName}')">
+                    <i class="fas fa-play"></i> Start Application
+                </button>
+                <button class="btn-secondary" onclick="viewRequirements('${serviceName}')">
+                    <i class="fas fa-list"></i> View Requirements
+                </button>
+                <button class="btn-secondary" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    `);
+}
+
+// Action Modal
+function showActionModal(actionTitle) {
+    const modal = createModal(`
+        <div style="text-align: center; padding: 2rem;">
+            <i class="fas fa-rocket" style="font-size: 3rem; color: #f59e0b; margin-bottom: 1rem;"></i>
+            <h2 style="margin-bottom: 1rem; color: #1e293b;">${actionTitle}</h2>
+            <p style="margin-bottom: 2rem; color: #64748b;">
+                This quick action will help you ${actionTitle.toLowerCase()} efficiently.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="executeAction('${actionTitle}')">
+                    <i class="fas fa-bolt"></i> Continue
+                </button>
+                <button class="btn-secondary" onclick="closeModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    `);
+}
+
+// Create Modal
+function createModal(content) {
+    // Remove existing modal
+    const existingModal = document.querySelector('.modal-overlay');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    modalOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-out;
+    `;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.cssText = `
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        animation: slideInUp 0.3s ease-out;
+    `;
+    
+    modal.innerHTML = content;
+    modalOverlay.appendChild(modal);
+    document.body.appendChild(modalOverlay);
+    
+    // Close on overlay click
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+    
+    return modal;
+}
+
+// Close Modal
+function closeModal() {
+    const modal = document.querySelector('.modal-overlay');
+    if (modal) {
+        modal.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+// Action Functions
+function startApplication(serviceName) {
+    showNotification(`Starting application for ${serviceName}...`);
+    closeModal();
+    // In a real app, this would redirect to the application form
+    setTimeout(() => {
+        showNotification(`Redirecting to ${serviceName} application form`);
+    }, 1000);
+}
+
+function viewRequirements(serviceName) {
+    showNotification(`Loading requirements for ${serviceName}...`);
+    closeModal();
+    // In a real app, this would show the requirements
+    setTimeout(() => {
+        showNotification(`Displaying requirements for ${serviceName}`);
+    }, 1000);
+}
+
+function executeAction(actionTitle) {
+    showNotification(`Executing ${actionTitle}...`);
+    closeModal();
+    // In a real app, this would perform the specific action
+    setTimeout(() => {
+        showNotification(`${actionTitle} initiated successfully`);
+    }, 1000);
+}
+
+// Add modal animations to stylesheet
+const modalStyles = document.createElement('style');
+modalStyles.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(modalStyles);
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Add loading states for interactive elements
+function addLoadingState(element, duration = 1000) {
+    const originalText = element.textContent;
+    element.textContent = 'Loading...';
+    element.disabled = true;
+    element.style.opacity = '0.7';
+    
+    setTimeout(() => {
+        element.textContent = originalText;
+        element.disabled = false;
+        element.style.opacity = '1';
+    }, duration);
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', () => {
+    // Check authentication first
+    const userData = checkAuthentication();
+    if (!userData) return;
+    
+    console.log('OneHub Zone - Citizen Services Dashboard Loaded');
+    initializeDashboard();
+    
+    // Add stagger animation to service categories
+    const serviceCategories = document.querySelectorAll('.service-category');
+    serviceCategories.forEach((category, index) => {
+        category.style.animationDelay = `${index * 0.1}s`;
+    });
+    
+    // Add stagger animation to quick action cards
+    const quickActions = document.querySelectorAll('.quick-action-card');
+    quickActions.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+    });
+});
+
+// Handle form submissions (if any forms are added later)
+function handleFormSubmit(formData, serviceType) {
+    showNotification(`Submitting ${serviceType} application...`);
+    
+    // Simulate API call
+    setTimeout(() => {
+        const applicationId = generateApplicationId();
+        showNotification(`Application submitted successfully! Reference ID: ${applicationId}`);
+    }, 2000);
+}
+
+// Generate random application ID
+function generateApplicationId() {
+    const prefix = 'APP';
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.random().toString(36).substr(2, 4).toUpperCase();
+    return `${prefix}${timestamp}${random}`;
+}
+
+// Export functions for potential future use
+window.OneHubZone = {
+    search: performSearch,
+    showNotification: showNotification,
+    showServiceModal: showServiceModal,
+    showActionModal: showActionModal,
+    closeModal: closeModal
+};

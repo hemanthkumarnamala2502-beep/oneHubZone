@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneHub Zone - Citizen Services Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-city"></i>
+                    <span>OneHub Zone</span>
+                </div>
+                <nav class="nav">
+                    <a href="#" class="nav-link">Dashboard</a>
+                    <a href="#services" class="nav-link">Services</a>
+                    <a href="#" class="nav-link">My Applications</a>
+                    <a href="#" class="nav-link">Profile</a>
+                </nav>
+                <div class="header-actions">
+                    <div class="user-info">
+                        <span class="user-name" id="userName">Loading...</span>
+                        <span class="user-id" id="userId"></span>
+                    </div>
+                    <button class="btn-secondary" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Welcome to Your Dashboard</h1>
+                <p>Access all citizen services securely from your personalized portal.</p>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="activeApplications">0</span>
+                            <span class="stat-label">Active Applications</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="pendingApprovals">0</span>
+                            <span class="stat-label">Pending Approvals</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="completedServices">0</span>
+                            <span class="stat-label">Completed Services</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-search">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search for services, permits, applications...">
+                        <button class="search-btn">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="quick-actions">
+        <div class="container">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions-grid">
+                <div class="quick-action-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Apply for Documents</h3>
+                    <p>Birth certificates, passports, licenses</p>
+                </div>
+                <div class="quick-action-card">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Pay Bills</h3>
+                    <p>Taxes, utilities, fines</p>
+                </div>
+                <div class="quick-action-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Book Appointment</h3>
+                    <p>Schedule visits to government offices</p>
+                </div>
+                <div class="quick-action-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Track Application</h3>
+                    <p>Check status of your submissions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Categories -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2>All Citizen Services</h2>
+            <div class="services-filter">
+                <button class="filter-btn active" data-filter="all">All Services</button>
+                <button class="filter-btn" data-filter="popular">Most Popular</button>
+                <button class="filter-btn" data-filter="recent">Recently Used</button>
+                <button class="filter-btn" data-filter="favorites">Favorites</button>
+            </div>
+            <div class="services-grid">
+                <!-- Identity & Documentation -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-id-card"></i>
+                        <h3>Identity & Documentation</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="https://ts.meeseva.telangana.gov.in/TSPortalgchu/UserInterface/Citizen/CDMA/UnifiedSearchBirthDeathRecords.aspx?ServiceType=1" target="_blank"><i class="fas fa-certificate"></i> Birth Certificate</a></li>
+                        <li><a href="https://portal2.passportindia.gov.in/AppOnlineProject/welcomeLink" target="_blank"><i class="fas fa-passport"></i> Passport Application</a></li>
+                        <li><a href="https://voters.eci.gov.in/" target="_blank"> <i class="fas fa-id-badge"></i> National ID Card</a></li>
+                        <li><a href="#"><i class="fas fa-ring"></i> Marriage Certificate</a></li>
+                        <li><a href="#"><i class="fas fa-cross"></i> Death Certificate</a></li>
+                        <li><a href="#"><i class="fas fa-users"></i> Family Registration</a></li>
+                    </ul>
+                </div>
+
+                <!-- Business & Licensing -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-briefcase"></i>
+                        <h3>Business & Licensing</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="#"><i class="fas fa-building"></i> Business Registration</a></li>
+                        <li><a href="#"><i class="fas fa-file-contract"></i> Trade License</a></li>
+                        <li><a href="#"><i class="fas fa-industry"></i> Industrial License</a></li>
+                        <li><a href="#"><i class="fas fa-utensils"></i> Food License</a></li>
+                        <li><a href="#"><i class="fas fa-fire"></i> Fire Safety Certificate</a></li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Environmental Clearance</a></li>
+                    </ul>
+                </div>
+
+                <!-- Transportation -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-car"></i>
+                        <h3>Transportation</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="https://transport.telangana.gov.in/" target="_blank"> <i class="fas fa-id-card-alt"></i> Driver's License</a></li>
+                        <li><a href="#"><i class="fas fa-car"></i> Vehicle Registration</a></li>
+                        <li><a href="#"><i class="fas fa-clipboard-check"></i> Vehicle Inspection</a></li>
+                        <li><a href="#"><i class="fas fa-road"></i> Road Tax Payment</a></li>
+                        <li><a href="#"><i class="fas fa-motorcycle"></i> Motorcycle License</a></li>
+                        <li><a href="#"><i class="fas fa-truck"></i> Commercial Vehicle Permit</a></li>
+                    </ul>
+                </div>
+
+                <!-- Property & Housing -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-home"></i>
+                        <h3>Property & Housing</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="#"><i class="fas fa-file-alt"></i> Property Registration</a></li>
+                        <li><a href="#"><i class="fas fa-hammer"></i> Building Permits</a></li>
+                        <li><a href="#"><i class="fas fa-home"></i> Housing Schemes</a></li>
+                        <li><a href="#"><i class="fas fa-money-bill-wave"></i> Property Tax</a></li>
+                        <li><a href="#"><i class="fas fa-map"></i> Land Survey</a></li>
+                        <li><a href="#"><i class="fas fa-clipboard-list"></i> Occupancy Certificate</a></li>
+                    </ul>
+                </div>
+
+                <!-- Health & Welfare -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>Health & Welfare</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="#"><i class="fas fa-user-md"></i> Health Card Registration</a></li>
+                        <li><a href="https://www.covid19india.org/covid-19-vaccine-certificate/" target="_blank"> <i class="fas fa-syringe"></i> Vaccination Certificate</a></li>
+                        <li><a href="#"><i class="fas fa-wheelchair"></i> Disability Certificate</a></li>
+                        <li><a href="#"><i class="fas fa-hand-holding-heart"></i> Welfare Schemes</a></li>
+                        <li><a href="#"><i class="fas fa-baby"></i> Maternity Benefits</a></li>
+                        <li><a href="#"><i class="fas fa-pills"></i> Medical License</a></li>
+                    </ul>
+                </div>
+
+                <!-- Education -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Education</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="file:///C:/Users/2016334/Vibecode/college.html"  target="_blank"><i class="fas fa-graduation-cap"></i> College Education</a></li>
+                        <li><a href="#"><i class="fas fa-certificate"></i> Educational Certificates</a></li>
+                        <li><a href="#"><i class="fas fa-graduation-cap"></i> Scholarship Application</a></li>
+                        <li><a href="#"><i class="fas fa-book"></i> Library Card</a></li>
+                        <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Teacher Registration</a></li>
+                        <li><a href="#"><i class="fas fa-university"></i> University Services</a></li>
+                    </ul>
+                </div>
+
+                <!-- Utilities -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Utilities</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="#"><i class="fas fa-lightbulb"></i> Electricity Connection</a></li>
+                        <li><a href="#"><i class="fas fa-tint"></i> Water Connection</a></li>
+                        <li><a href="#"><i class="fas fa-bank"></i> ATM location</a></li>
+                        <li><a href="#"><i class="fas fa-wifi"></i> Internet Connection</a></li>
+                        <li><a href="#"><i class="fas fa-trash"></i> Waste Management</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> Telephone Connection</a></li>
+                    </ul>
+                </div>
+
+                <!-- Financial Services -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-coins"></i>
+                        <h3>Financial Services</h3>
+                    </div>
+                    <div class="service-list">
+                        <li><a href="file:///C:/Users/2016334/VS%20Code/PF%20file/index.html#epfo" target="_blank" class="fas fa-receipt">EPFO services</a></li>
+                        <li><a href="file:///C:/Users/2016334/Vibecode/index.html" target="_blank"><i class="fas fa-percentage"></i> Bank Services</a></li>
+                        <li><a href="#"><i class="fas fa-hand-holding-usd"></i> Loan Applications</a></li>
+                        <li><a href="#"><i class="fas fa-piggy-bank"></i> Savings Schemes</a></li>
+                        <li><a href="#"><i class="fas fa-chart-pie"></i> Investment Services</a></li>
+                        <li><a href="#"><i class="fas fa-receipt"></i> Payment Services</a></li>
+                    </div>
+                </div>
+
+                <!-- Legal Services -->
+                <div class="service-category">
+                    <div class="category-header">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Legal Services</h3>
+                    </div>
+                    <ul class="service-list">
+                        <li><a href="#"><i class="fas fa-gavel"></i> Court Services</a></li>
+                        <li><a href="#"><i class="fas fa-file-signature"></i> Legal Documentation</a></li>
+                        <li><a href="#"><i class="fas fa-handshake"></i> Legal Aid</a></li>
+                        <li><a href="#"><i class="fas fa-stamp"></i> Notarization</a></li>
+                        <li><a href="#"><i class="fas fa-search"></i> Case Status</a></li>
+                        <li><a href="#"><i class="fas fa-user-tie"></i> Lawyer Registration</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Services -->
+    <section class="emergency-services">
+        <div class="container">
+            <h2>Emergency Services</h2>
+            <div class="emergency-grid">
+                <div class="emergency-card urgent">
+                    <i class="fas fa-phone-alt"></i>
+                    <h3>Emergency Hotline</h3>
+                    <p class="phone-number">911</p>
+                    <p>24/7 Emergency Response</p>
+                </div>
+                <div class="emergency-card">
+                    <i class="fas fa-ambulance"></i>
+                    <h3>Medical Emergency</h3>
+                    <p class="phone-number">108</p>
+                    <p>Ambulance & Medical Aid</p>
+                </div>
+                <div class="emergency-card">
+                    <i class="fas fa-fire"></i>
+                    <h3>Fire Department</h3>
+                    <p class="phone-number">101</p>
+                    <p>Fire & Rescue Services</p>
+                </div>
+                <div class="emergency-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Police</h3>
+                    <p class="phone-number">100</p>
+                    <p>Law Enforcement</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-city"></i>
+                        <span>OneHub Zone</span>
+                    </div>
+                    <p>Your one-stop destination for all government services. Making citizen services accessible and efficient.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Licensing</a></li>
+                        <li><a href="#">Transportation</a></li>
+                        <li><a href="#">Property</a></li>
+                        <li><a href="#">Health & Welfare</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">User Guide</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Live Chat</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 OneHub Zone. All rights reserved. | Powered by Government Digital Services</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

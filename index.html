@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneHub Zone - Citizen Services Portal</title>
+    <link rel="stylesheet" href="landing-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="landing-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-city"></i>
+                        <span>OneHub Zone</span>
+                    </div>
+                    <nav class="nav">
+                        <a href="#features" class="nav-link">Features</a>
+                        <a href="#services" class="nav-link">Services</a>
+                        <a href="#about" class="nav-link">About</a>
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </nav>
+                    <div class="header-actions">
+                        <button class="btn-secondary" onclick="window.location.href='login.html'">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign In
+                        </button>
+                        <button class="btn-primary" onclick="showRegistration()">
+                            <i class="fas fa-user-plus"></i>
+                            Register
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Your Digital Gateway to Government Services</h1>
+                        <p class="hero-description">
+                            Access all citizen services in one secure, convenient location. 
+                            From document applications to utility connections, everything you need is just a click away.
+                        </p>
+                        <div class="hero-features">
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Secure & Encrypted</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-clock"></i>
+                                <span>24/7 Available</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-mobile-alt"></i>
+                                <span>Mobile Friendly</span>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <button class="cta-button" onclick="window.location.href='login.html'">
+                                <i class="fas fa-rocket"></i>
+                                Get Started Now
+                            </button>
+                            <button class="demo-button" onclick="showDemoVideo()">
+                                <i class="fas fa-play"></i>
+                                Watch Demo
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="dashboard-preview">
+                            <div class="preview-header">
+                                <div class="preview-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <span class="preview-title">OneHub Dashboard</span>
+                            </div>
+                            <div class="preview-content">
+                                <div class="preview-stats">
+                                    <div class="preview-stat">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <div class="stat-data">
+                                            <span class="stat-number">3</span>
+                                            <span class="stat-label">Active</span>
+                                        </div>
+                                    </div>
+                                    <div class="preview-stat">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="stat-data">
+                                            <span class="stat-number">2</span>
+                                            <span class="stat-label">Pending</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="preview-services">
+                                    <div class="service-item">
+                                        <i class="fas fa-id-card"></i>
+                                        <span>Identity & Documentation</span>
+                                    </div>
+                                    <div class="service-item">
+                                        <i class="fas fa-car"></i>
+                                        <span>Transportation Services</span>
+                                    </div>
+                                    <div class="service-item">
+                                        <i class="fas fa-home"></i>
+                                        <span>Property & Housing</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Why Choose OneHub Zone?</h2>
+                    <p>Experience government services like never before with our comprehensive digital platform</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Fast & Efficient</h3>
+                        <p>Complete applications in minutes, not hours. Our streamlined process saves you time and effort.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Secure Platform</h3>
+                        <p>Bank-level security with 256-bit encryption ensures your personal information stays protected.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Real-time Tracking</h3>
+                        <p>Track your applications in real-time and get instant updates on their progress.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>24/7 Support</h3>
+                        <p>Our dedicated support team is available round the clock to assist you with any queries.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>Universal Access</h3>
+                        <p>Access services from anywhere, anytime on any device. No need to visit physical offices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h3>Cost Effective</h3>
+                        <p>Save money on travel and paperwork. Many services are available at reduced or no cost.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Overview -->
+        <section class="services-overview" id="services">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Available Services</h2>
+                    <p>Access over 50+ government services across 9 major categories</p>
+                </div>
+                <div class="services-preview">
+                    <div class="service-category-preview">
+                        <div class="category-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h3>Identity & Documentation</h3>
+                        <p>Birth certificates, passports, national ID cards, and more</p>
+                        <span class="service-count">6 Services</span>
+                    </div>
+                    <div class="service-category-preview">
+                        <div class="category-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Business & Licensing</h3>
+                        <p>Business registration, trade licenses, permits</p>
+                        <span class="service-count">6 Services</span>
+                    </div>
+                    <div class="service-category-preview">
+                        <div class="category-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3>Transportation</h3>
+                        <p>Driver's licenses, vehicle registration, road tax</p>
+                        <span class="service-count">6 Services</span>
+                    </div>
+                    <div class="service-category-preview">
+                        <div class="category-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3>Property & Housing</h3>
+                        <p>Property registration, building permits, housing schemes</p>
+                        <span class="service-count">6 Services</span>
+                    </div>
+                    <div class="service-category-preview">
+                        <div class="category-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Health & Welfare</h3>
+                        <p>Health cards, vaccination certificates, welfare schemes</p>
+                        <span class="service-count">6 Services</span>
+                    </div>
+                    <div class="service-category-preview">
+                        <div class="category-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Education</h3>
+                        <p>School admissions, certificates, scholarships</p>
+                        <span class="service-count">6 Services</span>
+                    </div>
+                </div>
+                <div class="services-cta">
+                    <button class="btn-primary large" onclick="window.location.href='login.html'">
+                        <i class="fas fa-arrow-right"></i>
+                        Explore All Services
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="statistics">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="50000">0</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="150000">0</div>
+                        <div class="stat-label">Applications Processed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="98">0</div>
+                        <div class="stat-label">% Satisfaction Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="24">0</div>
+                        <div class="stat-label">Hours Availability</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to Get Started?</h2>
+                    <p>Join thousands of citizens who have simplified their government service experience with OneHub Zone.</p>
+                    <div class="cta-actions">
+                        <button class="btn-primary large" onclick="window.location.href='login.html'">
+                            <i class="fas fa-user-plus"></i>
+                            Create Account
+                        </button>
+                        <button class="btn-secondary large" onclick="window.location.href='login.html'">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign In
+                        </button>
+                    </div>
+                    <p class="cta-note">
+                        <i class="fas fa-shield-alt"></i>
+                        Your data is protected with bank-level security
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <div class="logo">
+                            <i class="fas fa-city"></i>
+                            <span>OneHub Zone</span>
+                        </div>
+                        <p>Your one-stop destination for all government services. Making citizen services accessible and efficient.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Services</h4>
+                        <ul>
+                            <li><a href="#">Identity Documents</a></li>
+                            <li><a href="#">Business License</a></li>
+                            <li><a href="#">Transportation</a></li>
+                            <li><a href="#">Property Services</a></li>
+                            <li><a href="#">Health & Welfare</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Support</h4>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">User Guide</a></li>
+                            <li><a href="#">Contact Support</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">System Status</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="#">Accessibility</a></li>
+                            <li><a href="#">Security</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 OneHub Zone. All rights reserved by Hemanth Namala. | Powered by Government Digital Services</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="landing-script.js"></script>
+</body>
+</html>
