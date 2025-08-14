@@ -502,15 +502,24 @@ function executeAction(actionTitle) {
     }, 1000);
 }
 
-// Open official government site
-function openOfficialSite(url, serviceName) {
-    if (url && url !== '#') {
-        window.open(url, '_blank');
-        showNotification(`Opened ${serviceName} official page`, 'success');
+// Open Official Government Website
+function openOfficialSite(serviceUrl, serviceName) {
+    if (serviceUrl && serviceUrl !== '#') {
+        // Show loading notification
+        showNotification(`Redirecting to official ${serviceName} website...`, 'info');
+        
+        // Close modal first
+        closeModal();
+        
+        // Open the government website in a new tab after a short delay
+        setTimeout(() => {
+            window.open(serviceUrl, '_blank', 'noopener,noreferrer');
+            showNotification(`Opened ${serviceName} in new tab`, 'success');
+        }, 500);
     } else {
-        showNotification(`Official link for ${serviceName} coming soon`, 'info');
+        showNotification('Official website link not available', 'warning');
+        closeModal();
     }
-    closeModal();
 }
 
 // Add modal animations to stylesheet
@@ -737,6 +746,9 @@ function updateStateDisplay() {
 function initializeStateSelector() {
     if (!stateSelector) return;
     
+    // Clear existing options first to prevent duplicates
+    stateSelector.innerHTML = '<option value="">Select State</option>';
+    
     // Populate state selector options
     Object.keys(stateServicesData).forEach(stateKey => {
         const state = stateServicesData[stateKey];
@@ -778,6 +790,8 @@ function filterServicesByState(stateKey) {
                 const serviceItem = document.createElement('a');
                 serviceItem.href = '#';
                 serviceItem.className = 'service-item';
+                serviceItem.setAttribute('data-service-name', service.name);
+                serviceItem.setAttribute('data-service-url', service.url);
                 serviceItem.innerHTML = `
                     <i class="fas ${service.icon}" aria-hidden="true"></i>
                     ${service.name}
@@ -785,7 +799,7 @@ function filterServicesByState(stateKey) {
                 
                 serviceItem.addEventListener('click', (e) => {
                     e.preventDefault();
-                    showServiceModal(service.name);
+                    showServiceModal(service.name, service.url);
                 });
                 
                 serviceList.appendChild(serviceItem);
@@ -894,7 +908,12 @@ function loadStatePreference() {
         switchState(savedState);
     } else {
         // Default to first state
-        switchState(Object.keys(stateServicesData)[0]);
+        const firstState = Object.keys(stateServicesData)[0];
+        currentState = firstState;
+        if (stateSelector) {
+            stateSelector.value = firstState;
+        }
+        switchState(firstState);
     }
 }
 
