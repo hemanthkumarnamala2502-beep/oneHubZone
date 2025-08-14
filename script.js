@@ -9,6 +9,10 @@ const userIdElement = document.getElementById('userId');
 const logoutBtn = document.getElementById('logoutBtn');
 const filterBtns = document.querySelectorAll('.filter-btn');
 
+// State management variables
+let currentState = 'telangana';
+const stateSelector = document.getElementById('stateSelect');
+
 // Authentication check
 function checkAuthentication() {
     const userSession = localStorage.getItem('userSession') || sessionStorage.getItem('userSession');
@@ -68,23 +72,37 @@ function initializeDashboard() {
 
 // Initialize service links functionality
 function initializeServiceLinks() {
-    // Re-query service links after DOM update
-    serviceLinks = document.querySelectorAll('.service-list a');
+    // Use event delegation instead of individual event listeners
+    // This ensures clicks work on dynamically added elements
+    const nationalGrid = document.getElementById('nationalServicesGrid');
+    const stateGrid = document.getElementById('stateServicesGrid');
     
-    serviceLinks.forEach(link => {
-        // Remove existing event listeners by cloning
-        const newLink = link.cloneNode(true);
-        link.parentNode.replaceChild(newLink, link);
-        
-        newLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const serviceName = newLink.getAttribute('data-service-name') || newLink.textContent.trim();
-            const serviceUrl = newLink.getAttribute('data-service-url') || '#';
-            showServiceModal(serviceName, serviceUrl);
-        });
-    });
+    // Remove any existing event listeners first
+    if (nationalGrid) {
+        nationalGrid.removeEventListener('click', handleServiceClick);
+        nationalGrid.addEventListener('click', handleServiceClick);
+    }
     
-    console.log(`Initialized ${serviceLinks.length} service links`);
+    if (stateGrid) {
+        stateGrid.removeEventListener('click', handleServiceClick);
+        stateGrid.addEventListener('click', handleServiceClick);
+    }
+    
+    console.log('Service link event delegation initialized');
+}
+
+// Handle service link clicks using event delegation
+function handleServiceClick(e) {
+    // Check if clicked element is a service link
+    const link = e.target.closest('.service-list a');
+    if (!link) return;
+    
+    e.preventDefault();
+    const serviceName = link.getAttribute('data-service-name') || link.textContent.trim();
+    const serviceUrl = link.getAttribute('data-service-url') || '#';
+    
+    console.log(`Service clicked: ${serviceName} -> ${serviceUrl}`);
+    showServiceModal(serviceName, serviceUrl);
 }
 
 // Update dashboard statistics
@@ -126,67 +144,103 @@ function animateNumber(element, target) {
     }, 50);
 }
 
-// Logout functionality
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-        if (confirm('Are you sure you want to logout?')) {
-            localStorage.removeItem('userSession');
-            sessionStorage.removeItem('userSession');
-            showNotification('Logged out successfully', 'success');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1000);
+// Show notification
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Show notification
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 100);
+    
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+// Show service modal
+function showServiceModal(serviceName, serviceUrl) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>${serviceName}</h2>
+                <button class="close-btn" onclick="closeModal(this)">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>You are about to access the official government service for <strong>${serviceName}</strong>.</p>
+                <div class="modal-actions">
+                    <button onclick="window.open('${serviceUrl}', '_blank')" class="btn-primary">
+                        <i class="fas fa-external-link-alt"></i> Open Service
+                    </button>
+                    <button onclick="closeModal(this)" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal(modal);
         }
     });
 }
 
-// Service filter functionality
-if (filterBtns.length > 0) {
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove active class from all buttons
-            filterBtns.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            this.classList.add('active');
-            
-            const filter = this.getAttribute('data-filter');
-            filterServices(filter);
-        });
+// Show quick action modal
+function showActionModal(actionName) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>${actionName}</h2>
+                <button class="close-btn" onclick="closeModal(this)">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This feature will be available soon. We're working to bring you the best experience for ${actionName.toLowerCase()}.</p>
+                <div class="modal-actions">
+                    <button onclick="closeModal(this)" class="btn-primary">OK</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal(modal);
+        }
     });
 }
 
-// Filter services based on category
-function filterServices(filter) {
-    const serviceCategories = document.querySelectorAll('.service-category');
-    
-    serviceCategories.forEach(category => {
-        switch(filter) {
-            case 'all':
-                category.style.display = 'block';
-                break;
-            case 'popular':
-                // Show only first 4 categories as "popular"
-                const index = Array.from(serviceCategories).indexOf(category);
-                category.style.display = index < 4 ? 'block' : 'none';
-                break;
-            case 'recent':
-                // Show random 3 categories as "recent"
-                category.style.display = Math.random() > 0.5 ? 'block' : 'none';
-                break;
-            case 'favorites':
-                // Show only first 3 categories as "favorites"
-                const favIndex = Array.from(serviceCategories).indexOf(category);
-                category.style.display = favIndex < 3 ? 'block' : 'none';
-                break;
-        }
-    });
-    
-    showNotification(`Showing ${filter === 'all' ? 'all' : filter} services`, 'info');
+// Close modal
+function closeModal(element) {
+    const modal = element.closest ? element.closest('.modal-overlay') : element.parentElement.parentElement.parentElement;
+    if (modal) {
+        modal.remove();
+    }
 }
 
 // Search functionality
 function performSearch() {
-    const query = searchInput.value.toLowerCase().trim();
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     
     if (query === '') {
         alert('Please enter a search term');
@@ -198,382 +252,54 @@ function performSearch() {
     
     serviceLinks.forEach(link => {
         const serviceName = link.textContent.toLowerCase();
-        const serviceCategory = link.closest('.service-category').querySelector('.category-header h3').textContent.toLowerCase();
-        
-        if (serviceName.includes(query) || serviceCategory.includes(query)) {
+        if (serviceName.includes(query)) {
             foundServices.push({
                 name: link.textContent.trim(),
-                category: serviceCategory,
-                element: link
+                url: link.getAttribute('data-service-url') || '#'
             });
         }
     });
     
     if (foundServices.length > 0) {
-        // Highlight found services
-        highlightSearchResults(foundServices);
-        
-        // Scroll to first result
-        foundServices[0].element.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-        });
-        
-        showNotification(`Found ${foundServices.length} service(s) matching "${query}"`);
+        showSearchResults(foundServices, query);
     } else {
-        showNotification(`No services found for "${query}"`);
+        showNotification(`No services found for "${query}"`, 'error');
     }
 }
 
-// Highlight search results
-function highlightSearchResults(results) {
-    // Clear previous highlights
-    serviceLinks.forEach(link => {
-        link.style.backgroundColor = '';
-        link.style.transform = '';
-    });
-    
-    // Highlight new results
-    results.forEach(result => {
-        result.element.style.backgroundColor = '#e0f2fe';
-        result.element.style.transform = 'scale(1.02)';
-    });
-    
-    // Remove highlights after 3 seconds
-    setTimeout(() => {
-        results.forEach(result => {
-            result.element.style.backgroundColor = '';
-            result.element.style.transform = '';
-        });
-    }, 3000);
-}
-
-// Show notification
-function showNotification(message) {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
-    
-    // Create new notification
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #10b981;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        z-index: 1000;
-        animation: slideInRight 0.3s ease-out;
-    `;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease-out';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
-
-// Add CSS animations for notifications
-const notificationStyles = document.createElement('style');
-notificationStyles.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(notificationStyles);
-
-// Event Listeners
-searchBtn.addEventListener('click', performSearch);
-
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        performSearch();
-    }
-});
-
-// Service link interactions
-serviceLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const serviceName = link.textContent.trim();
-        showServiceModal(serviceName);
-    });
-});
-
-// Quick action card interactions
-quickActionCards.forEach(card => {
-    card.addEventListener('click', () => {
-        const actionTitle = card.querySelector('h3').textContent;
-        showActionModal(actionTitle);
-    });
-    
-    // Add hover sound effect (optional)
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-5px) scale(1.02)';
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(-5px) scale(1)';
-    });
-});
-
-// Emergency card interactions
-emergencyCards.forEach(card => {
-    card.addEventListener('click', () => {
-        const phoneNumber = card.querySelector('.phone-number').textContent;
-        const serviceName = card.querySelector('h3').textContent;
-        
-        if (confirm(`Call ${serviceName} at ${phoneNumber}?`)) {
-            // In a real app, this would initiate a phone call
-            window.open(`tel:${phoneNumber}`, '_blank');
-        }
-    });
-});
-
-// Service Modal
-function showServiceModal(serviceName, serviceUrl) {
-    const stateData = stateServicesData[currentState];
-    const modal = createModal(`
-        <div style="text-align: center; padding: 2rem;">
-            <i class="fas fa-info-circle" style="font-size: 3rem; color: #2563eb; margin-bottom: 1rem;"></i>
-            <h2 style="margin-bottom: 1rem; color: #1e293b;">${serviceName}</h2>
-            <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 0.5rem; padding: 1rem; margin: 1rem 0;">
-                <p style="color: #0c4a6e; font-size: 0.875rem;">
-                    <i class="fas fa-map-marker-alt"></i>
-                    ${stateData.name} State Service
-                </p>
-            </div>
-            <p style="margin-bottom: 2rem; color: #64748b;">
-                To apply for ${serviceName}, you will be redirected to the official ${stateData.name} government website.
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button class="btn-primary" onclick="openOfficialSite('${serviceUrl}', '${serviceName}')">
-                    <i class="fas fa-external-link-alt"></i> Go to Official Site
-                </button>
-                <button class="btn-secondary" onclick="viewRequirements('${serviceName}')">
-                    <i class="fas fa-list"></i> View Requirements
-                </button>
-                <button class="btn-secondary" onclick="closeModal()">
-                    <i class="fas fa-times"></i> Close
-                </button>
-            </div>
-        </div>
-    `);
-}
-
-// Action Modal
-function showActionModal(actionTitle) {
-    const modal = createModal(`
-        <div style="text-align: center; padding: 2rem;">
-            <i class="fas fa-rocket" style="font-size: 3rem; color: #f59e0b; margin-bottom: 1rem;"></i>
-            <h2 style="margin-bottom: 1rem; color: #1e293b;">${actionTitle}</h2>
-            <p style="margin-bottom: 2rem; color: #64748b;">
-                This quick action will help you ${actionTitle.toLowerCase()} efficiently.
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button class="btn-primary" onclick="executeAction('${actionTitle}')">
-                    <i class="fas fa-bolt"></i> Continue
-                </button>
-                <button class="btn-secondary" onclick="closeModal()">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    `);
-}
-
-// Create Modal
-function createModal(content) {
-    // Remove existing modal
-    const existingModal = document.querySelector('.modal-overlay');
-    if (existingModal) {
-        existingModal.remove();
-    }
-    
-    const modalOverlay = document.createElement('div');
-    modalOverlay.className = 'modal-overlay';
-    modalOverlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        animation: fadeIn 0.3s ease-out;
-    `;
-    
+// Show search results modal
+function showSearchResults(services, query) {
     const modal = document.createElement('div');
-    modal.className = 'modal';
-    modal.style.cssText = `
-        background: white;
-        border-radius: 1rem;
-        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-        max-width: 500px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        animation: slideInUp 0.3s ease-out;
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Search Results for "${query}"</h2>
+                <button class="close-btn" onclick="closeModal(this)">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-results">
+                    ${services.map(service => `
+                        <div class="search-result-item">
+                            <h4>${service.name}</h4>
+                            <button onclick="window.open('${service.url}', '_blank')" class="btn-primary">
+                                Access Service
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
     `;
     
-    modal.innerHTML = content;
-    modalOverlay.appendChild(modal);
-    document.body.appendChild(modalOverlay);
+    document.body.appendChild(modal);
     
-    // Close on overlay click
-    modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            closeModal();
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeModal(modal);
         }
     });
-    
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
-    });
-    
-    return modal;
-}
-
-// Close Modal
-function closeModal() {
-    const modal = document.querySelector('.modal-overlay');
-    if (modal) {
-        modal.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => modal.remove(), 300);
-    }
-}
-
-// Action Functions
-function startApplication(serviceName) {
-    showNotification(`Starting application for ${serviceName}...`);
-    closeModal();
-    // In a real app, this would redirect to the application form
-    setTimeout(() => {
-        showNotification(`Redirecting to ${serviceName} application form`);
-    }, 1000);
-}
-
-function viewRequirements(serviceName) {
-    showNotification(`Loading requirements for ${serviceName}...`);
-    closeModal();
-    // In a real app, this would show the requirements
-    setTimeout(() => {
-        showNotification(`Displaying requirements for ${serviceName}`);
-    }, 1000);
-}
-
-function executeAction(actionTitle) {
-    showNotification(`Executing ${actionTitle}...`);
-    closeModal();
-    // In a real app, this would perform the specific action
-    setTimeout(() => {
-        showNotification(`${actionTitle} initiated successfully`);
-    }, 1000);
-}
-
-// Open Official Government Website
-function openOfficialSite(serviceUrl, serviceName) {
-    if (serviceUrl && serviceUrl !== '#') {
-        // Show loading notification
-        showNotification(`Redirecting to official ${serviceName} website...`, 'info');
-        
-        // Close modal first
-        closeModal();
-        
-        // Open the government website in a new tab after a short delay
-        setTimeout(() => {
-            window.open(serviceUrl, '_blank', 'noopener,noreferrer');
-            showNotification(`Opened ${serviceName} in new tab`, 'success');
-        }, 500);
-    } else {
-        showNotification('Official website link not available', 'warning');
-        closeModal();
-    }
-}
-
-// Add modal animations to stylesheet
-const modalStyles = document.createElement('style');
-modalStyles.textContent = `
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    
-    @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
-    }
-    
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-`;
-document.head.appendChild(modalStyles);
-
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
-
-// Add loading states for interactive elements
-function addLoadingState(element, duration = 1000) {
-    const originalText = element.textContent;
-    element.textContent = 'Loading...';
-    element.disabled = true;
-    element.style.opacity = '0.7';
-    
-    setTimeout(() => {
-        element.textContent = originalText;
-        element.disabled = false;
-        element.style.opacity = '1';
-    }, duration);
 }
 
 // National Services (Common for all states)
@@ -704,16 +430,16 @@ const stateServicesData = {
                 { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
                 { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
                 { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
-                { name: 'Road Tax & Fees', icon: 'fa-road', url: 'https://aptransport.org/online-services/' },
-                { name: 'Permit Application', icon: 'fa-file-alt', url: 'https://aptransport.org/online-services/' }
+                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://transport.ap.gov.in/' },
+                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://transport.ap.gov.in/' }
             ],
             'Property & Housing': [
                 { name: 'Property Registration', icon: 'fa-home', url: 'https://webland.ap.gov.in/' },
-                { name: 'Building Permission', icon: 'fa-hammer', url: 'https://webland.ap.gov.in/' },
-                { name: 'Land Records', icon: 'fa-map', url: 'https://webland.ap.gov.in/' },
-                { name: 'Patta Services', icon: 'fa-file-alt', url: 'https://webland.ap.gov.in/' },
+                { name: 'Building Plan Approval', icon: 'fa-hammer', url: 'https://webland.ap.gov.in/' },
+                { name: 'Patta & Title', icon: 'fa-file-alt', url: 'https://webland.ap.gov.in/' },
+                { name: 'Survey Settlement', icon: 'fa-map', url: 'https://webland.ap.gov.in/' },
                 { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://webland.ap.gov.in/' },
-                { name: 'Housing Scheme', icon: 'fa-building', url: 'https://apshcl.ap.gov.in/' }
+                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://apshcl.ap.gov.in/' }
             ]
         }
     },
@@ -729,11 +455,11 @@ const stateServicesData = {
                 { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://aaplesarkar.mahaonline.gov.in/' }
             ],
             'Business & Licensing': [
-                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://mahafacilitation.gov.in/' },
+                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://aaplesarkar.mahaonline.gov.in/' },
                 { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://services.gst.gov.in/services/login' },
                 { name: 'Trade License', icon: 'fa-industry', url: 'https://aaplesarkar.mahaonline.gov.in/' },
                 { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://foscos.fssai.gov.in/' },
-                { name: 'Factory License', icon: 'fa-cogs', url: 'https://mpcb.gov.in/online-services' },
+                { name: 'Factory License', icon: 'fa-industry', url: 'https://mpcb.gov.in/' },
                 { name: 'Professional Tax Certificate', icon: 'fa-receipt', url: 'https://aaplesarkar.mahaonline.gov.in/' }
             ],
             'Transportation': [
@@ -741,106 +467,63 @@ const stateServicesData = {
                 { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
                 { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
                 { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
-                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://transport.maharashtra.gov.in/1035/Online-Services' },
-                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://transport.maharashtra.gov.in/1035/Online-Services' }
+                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://transport.maharashtra.gov.in/' },
+                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://transport.maharashtra.gov.in/' }
             ],
             'Property & Housing': [
-                { name: 'Property Registration', icon: 'fa-home', url: 'https://aaplesarkar.mahaonline.gov.in/' },
+                { name: 'Property Registration', icon: 'fa-home', url: 'https://igr.maharashtra.gov.in/' },
                 { name: 'Building Plan Approval', icon: 'fa-hammer', url: 'https://aaplesarkar.mahaonline.gov.in/' },
-                { name: '7/12 Extract', icon: 'fa-file-alt', url: 'https://bhulekh.mahabhumi.gov.in/' },
-                { name: '8A Extract', icon: 'fa-map', url: 'https://bhulekh.mahabhumi.gov.in/' },
+                { name: 'Property Card', icon: 'fa-file-alt', url: 'https://aaplesarkar.mahaonline.gov.in/' },
+                { name: 'Survey Settlement', icon: 'fa-map', url: 'https://aaplesarkar.mahaonline.gov.in/' },
                 { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://aaplesarkar.mahaonline.gov.in/' },
-                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://mhada.maharashtra.gov.in/english' }
+                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://mhada.maharashtra.gov.in/' }
             ]
         }
     }
 };
 
-// Current selected state
-let currentState = 'telangana';
+// Get category icon based on category name
+function getCategoryIcon(categoryName) {
+    const iconMap = {
+        'Identity & Documentation': 'fa-id-card',
+        'Business & Licensing': 'fa-briefcase',
+        'Transportation': 'fa-car',
+        'Property & Housing': 'fa-home',
+        'Health & Welfare': 'fa-heartbeat',
+        'Education': 'fa-graduation-cap',
+        'Utilities': 'fa-bolt',
+        'Financial Services': 'fa-coins',
+        'Legal Services': 'fa-balance-scale',
+        'National Identity & Documentation': 'fa-id-card',
+        'National Employment & Finance': 'fa-briefcase',
+        'National Transportation': 'fa-car',
+        'National Banking & Schemes': 'fa-university'
+    };
+    return iconMap[categoryName] || 'fa-cog';
+}
 
-// DOM Elements for state functionality
-const stateSelector = document.getElementById('stateSelect');
-const currentStateDisplay = document.getElementById('currentState');
-
-// Update state display
-function updateStateDisplay() {
-    if (currentStateDisplay) {
-        currentStateDisplay.textContent = `Current State: ${stateServicesData[currentState].name}`;
+// Initialize state selector functionality
+function initializeStateSelector() {
+    if (stateSelector) {
+        stateSelector.addEventListener('change', function() {
+            const selectedState = this.value;
+            switchState(selectedState);
+        });
     }
 }
 
-// Initialize state selector
-function initializeStateSelector() {
-    if (!stateSelector) return;
-    
-    // Clear existing options first to prevent duplicates
-    stateSelector.innerHTML = '<option value="">Select State</option>';
-    
-    // Populate state selector options
-    Object.keys(stateServicesData).forEach(stateKey => {
-        const state = stateServicesData[stateKey];
-        const option = document.createElement('option');
-        option.value = stateKey;
-        option.textContent = state.name;
-        stateSelector.appendChild(option);
-    });
-    
-    // Set initial state display
-    updateStateDisplay();
-    
-    // Change event listener
-    stateSelector.addEventListener('change', function() {
-        const selectedState = this.value;
-        if (stateServicesData[selectedState]) {
-            currentState = selectedState;
-            updateStateDisplay();
-            filterServicesByState(currentState);
-        }
-    });
+// Initialize national service links functionality
+// Update state display elements
+function updateStateDisplay() {
+    const currentStateElements = document.querySelectorAll('#currentState');
+    if (currentStateElements.length > 0 && stateServicesData[currentState]) {
+        currentStateElements.forEach(element => {
+            element.textContent = stateServicesData[currentState].name;
+        });
+    }
 }
 
-// Filter services by current state
-function filterServicesByState(stateKey) {
-    const allServices = document.querySelectorAll('.service-category');
-    
-    allServices.forEach(category => {
-        const categoryName = category.querySelector('.category-header h3').textContent;
-        const services = stateServicesData[stateKey].services[categoryName] || [];
-        
-        if (services.length > 0) {
-            category.style.display = 'block';
-            const serviceList = category.querySelector('.service-list');
-            serviceList.innerHTML = ''; // Clear existing services
-            
-            // Add services for the current state
-            services.forEach(service => {
-                const serviceItem = document.createElement('a');
-                serviceItem.href = '#';
-                serviceItem.className = 'service-item';
-                serviceItem.setAttribute('data-service-name', service.name);
-                serviceItem.setAttribute('data-service-url', service.url);
-                serviceItem.innerHTML = `
-                    <i class="fas ${service.icon}" aria-hidden="true"></i>
-                    ${service.name}
-                `;
-                
-                serviceItem.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showServiceModal(service.name, service.url);
-                });
-                
-                serviceList.appendChild(serviceItem);
-            });
-        } else {
-            category.style.display = 'none';
-        }
-    });
-    
-    showNotification(`Services updated for ${stateServicesData[stateKey].name}`, 'info');
-}
-
-// State switching functionality
+// Switch state function
 function switchState(newState) {
     if (!stateServicesData[newState]) return;
     
@@ -862,71 +545,7 @@ function switchState(newState) {
     localStorage.setItem('selectedState', newState);
 }
 
-// Update services display for selected state
-function updateServicesForState(state) {
-    const stateData = stateServicesData[state];
-    const servicesGrid = document.querySelector('.services-grid');
-    
-    if (!servicesGrid) return;
-    
-    // Clear existing services
-    servicesGrid.innerHTML = '';
-    
-    // Add state-specific services
-    Object.keys(stateData.services).forEach(categoryName => {
-        const category = stateData.services[categoryName];
-        
-        const categoryElement = document.createElement('div');
-        categoryElement.className = 'service-category';
-        categoryElement.innerHTML = `
-            <div class="category-header">
-                <i class="fas ${getCategoryIcon(categoryName)}"></i>
-                <h3>${categoryName}</h3>
-                <span class="state-badge">${stateData.name}</span>
-            </div>
-            <ul class="service-list">
-                ${category.map(service => `
-                    <li>
-                        <a href="#" data-service-name="${service.name}" data-service-url="${service.url}">
-                            <i class="fas ${service.icon}"></i> 
-                            ${service.name}
-                        </a>
-                    </li>
-                `).join('')}
-            </ul>
-        `;
-        
-        servicesGrid.appendChild(categoryElement);
-    });
-    
-    // Re-initialize service links
-    initializeServiceLinks();
-}
-
-// Get category icon
-function getCategoryIcon(categoryName) {
-    const iconMap = {
-        'Identity & Documentation': 'fa-id-card',
-        'Business & Licensing': 'fa-briefcase',
-        'Transportation': 'fa-car',
-        'Property & Housing': 'fa-home',
-        'Health & Welfare': 'fa-heartbeat',
-        'Education': 'fa-graduation-cap',
-        'Utilities': 'fa-bolt',
-        'Financial Services': 'fa-coins',
-        'Legal Services': 'fa-balance-scale'
-    };
-    return iconMap[categoryName] || 'fa-cog';
-}
-
-// State selector event listener
-if (stateSelector) {
-    stateSelector.addEventListener('change', function() {
-        switchState(this.value);
-    });
-}
-
-// Load saved state preference
+// Load state preference
 function loadStatePreference() {
     const savedState = localStorage.getItem('selectedState');
     if (savedState && stateServicesData[savedState]) {
@@ -949,7 +568,10 @@ function loadStatePreference() {
 // Load National Services
 function loadNationalServices() {
     const nationalGrid = document.getElementById('nationalServicesGrid');
-    if (!nationalGrid) return;
+    if (!nationalGrid) {
+        console.error('National services grid not found');
+        return;
+    }
 
     nationalGrid.innerHTML = '';
 
@@ -980,14 +602,22 @@ function loadNationalServices() {
         nationalGrid.appendChild(categoryDiv);
     });
 
-    // Initialize national service links
-    initializeNationalServiceLinks();
+    console.log('National services loaded successfully');
+    // Event delegation is already set up in initializeServiceLinks()
 }
 
 // Load State Services for current state
 function loadStateServices(stateKey) {
     const stateGrid = document.getElementById('stateServicesGrid');
-    if (!stateGrid || !stateServicesData[stateKey]) return;
+    if (!stateGrid) {
+        console.error('State services grid not found');
+        return;
+    }
+    
+    if (!stateServicesData[stateKey]) {
+        console.error('State data not found for:', stateKey);
+        return;
+    }
 
     stateGrid.innerHTML = '';
 
@@ -1019,56 +649,140 @@ function loadStateServices(stateKey) {
     });
 
     // Update current state display
-    const currentStateSpan = document.getElementById('currentState');
-    if (currentStateSpan) {
-        currentStateSpan.textContent = stateServicesData[stateKey].name;
+    const currentStateElements = document.querySelectorAll('#currentState');
+    if (currentStateElements.length > 0) {
+        currentStateElements.forEach(element => {
+            element.textContent = stateServicesData[stateKey].name;
+        });
     }
+
+    console.log(`State services loaded for ${stateServicesData[stateKey].name}`);
+    // Event delegation handles all service links automatically
 }
 
-// Initialize the application
+// Event listeners setup
 document.addEventListener('DOMContentLoaded', () => {
     // Check authentication first
     const userData = checkAuthentication();
     if (!userData) return;
     
     console.log('OneHub Zone - Citizen Services Dashboard Loaded');
+    
+    // Initialize event delegation for service links FIRST
+    initializeServiceLinks();
+    
+    // Then initialize other components
     initializeDashboard();
     initializeStateSelector();
-    loadNationalServices();
     
-    // Add stagger animation to service categories
-    const serviceCategories = document.querySelectorAll('.service-category');
-    serviceCategories.forEach((category, index) => {
-        category.style.animationDelay = `${index * 0.1}s`;
+    // Setup search functionality
+    if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+    }
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    }
+
+    // Setup logout functionality
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('userSession');
+                sessionStorage.removeItem('userSession');
+                showNotification('Logged out successfully', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }
+        });
+    }
+
+    // Setup quick action cards
+    quickActionCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const actionName = this.querySelector('h3').textContent;
+            showActionModal(actionName);
+        });
     });
-    
-    // Add stagger animation to quick action cards
-    const quickActions = document.querySelectorAll('.quick-action-card');
-    quickActions.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
+
+    // Setup emergency cards
+    emergencyCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const phoneNumber = this.querySelector('.phone-number').textContent;
+            const serviceName = this.querySelector('h3').textContent;
+            
+            if (confirm(`Do you want to call ${serviceName} at ${phoneNumber}?`)) {
+                window.open(`tel:${phoneNumber}`);
+            }
+        });
     });
-    
-    // Load saved state preference (this will also load both national and state services)
-    loadStatePreference();
+
+    // Setup service filters
+    if (filterBtns.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                filterServices(filter);
+            });
+        });
+    }
+
+    // Load services after a short delay to ensure DOM is ready
+    setTimeout(() => {
+        console.log('Loading services...');
+        loadNationalServices();
+        loadStatePreference();
+    }, 200);
 });
 
-// Handle form submissions (if any forms are added later)
-function handleFormSubmit(formData, serviceType) {
-    showNotification(`Submitting ${serviceType} application...`);
+// Filter services based on category
+function filterServices(filter) {
+    const serviceCategories = document.querySelectorAll('.service-category');
     
-    // Simulate API call
-    setTimeout(() => {
-        const applicationId = generateApplicationId();
-        showNotification(`Application submitted successfully! Reference ID: ${applicationId}`);
-    }, 2000);
+    serviceCategories.forEach(category => {
+        switch(filter) {
+            case 'all':
+                category.style.display = 'block';
+                break;
+            case 'popular':
+                const index = Array.from(serviceCategories).indexOf(category);
+                category.style.display = index < 4 ? 'block' : 'none';
+                break;
+            case 'recent':
+                category.style.display = Math.random() > 0.5 ? 'block' : 'none';
+                break;
+            case 'favorites':
+                const favIndex = Array.from(serviceCategories).indexOf(category);
+                category.style.display = favIndex < 3 ? 'block' : 'none';
+                break;
+        }
+    });
+    
+    showNotification(`Showing ${filter === 'all' ? 'all' : filter} services`, 'info');
 }
 
-// Generate random application ID
-function generateApplicationId() {
-    const prefix = 'APP';
-    const timestamp = Date.now().toString().slice(-6);
-    const random = Math.random().toString(36).substr(2, 4).toUpperCase();
-    return `${prefix}${timestamp}${random}`;
+// Debug function to create test session
+function createTestSession() {
+    const testUser = {
+        id: 'TEST123',
+        name: 'Test User',
+        email: 'test@example.com',
+        phone: '9999999999',
+        loginTime: new Date().toISOString()
+    };
+    
+    localStorage.setItem('userSession', JSON.stringify(testUser));
+    console.log('Test session created:', testUser);
+    return testUser;
 }
 
 // Export functions for potential future use
@@ -1077,5 +791,9 @@ window.OneHubZone = {
     showNotification: showNotification,
     showServiceModal: showServiceModal,
     showActionModal: showActionModal,
-    closeModal: closeModal
+    closeModal: closeModal,
+    loadNationalServices: loadNationalServices,
+    loadStateServices: loadStateServices,
+    switchState: switchState,
+    createTestSession: createTestSession
 };
