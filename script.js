@@ -72,6 +72,8 @@ function initializeDashboard() {
 
 // Initialize service links functionality
 function initializeServiceLinks() {
+    console.log('=== INITIALIZING SERVICE LINKS ===');
+    
     // Use event delegation instead of individual event listeners
     // This ensures clicks work on dynamically added elements
     const nationalGrid = document.getElementById('nationalServicesGrid');
@@ -94,36 +96,74 @@ function initializeServiceLinks() {
         console.error('State services grid not found');
     }
     
+    // BACKUP: Also add direct click handlers to existing service links
+    setTimeout(() => {
+        const allServiceLinks = document.querySelectorAll('a[data-service-url]');
+        console.log(`Found ${allServiceLinks.length} service links for direct event handlers`);
+        
+        allServiceLinks.forEach((link, index) => {
+            const serviceName = link.getAttribute('data-service-name');
+            const serviceUrl = link.getAttribute('data-service-url');
+            console.log(`${index + 1}. ${serviceName} -> ${serviceUrl}`);
+            
+            // Remove any existing click handlers
+            link.removeEventListener('click', directServiceLinkHandler);
+            // Add direct click handler
+            link.addEventListener('click', directServiceLinkHandler);
+        });
+    }, 1000);
+    
     console.log('Service link event delegation initialized');
 }
 
-// Handle service link clicks using event delegation
-function handleServiceClick(e) {
-    console.log('Click detected:', e.target);
-    console.log('Target tagName:', e.target.tagName);
-    console.log('Target classes:', e.target.className);
-    
-    // Check if clicked element is a service link or within a service card
-    const link = e.target.closest('a[data-service-url]') || e.target.closest('.service-card a');
-    console.log('Found link:', link);
-    
-    if (!link) {
-        console.log('No service link found');
-        return;
-    }
-    
+// Direct service link handler as backup
+function directServiceLinkHandler(e) {
     e.preventDefault();
+    const link = e.currentTarget;
     const serviceName = link.getAttribute('data-service-name') || link.textContent.trim();
-    const serviceUrl = link.getAttribute('data-service-url') || '#';
+    const serviceUrl = link.getAttribute('data-service-url');
     
-    console.log(`Service clicked: ${serviceName} -> ${serviceUrl}`);
+    console.log('=== DIRECT LINK HANDLER ===');
+    console.log(`Direct click: ${serviceName} -> ${serviceUrl}`);
     
-    // If it's a valid URL, show modal, otherwise show error
     if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
         showServiceModal(serviceName, serviceUrl);
     } else {
         console.error('Invalid service URL:', serviceUrl);
         showNotification('Service URL not available', 'error');
+    }
+}
+
+// Handle service link clicks using event delegation
+function handleServiceClick(e) {
+    console.log('=== SERVICE CLICK DEBUG START ===');
+    console.log('Click detected:', e.target);
+    console.log('Target tagName:', e.target.tagName);
+    console.log('Target classes:', e.target.className);
+    console.log('Event target closest a:', e.target.closest('a'));
+    
+    // Check if clicked element is a service link or within a service card
+    const link = e.target.closest('a[data-service-url]') || e.target.closest('.service-card a') || e.target.closest('a');
+    console.log('Found link:', link);
+    
+    if (link && link.hasAttribute('data-service-url')) {
+        e.preventDefault();
+        const serviceName = link.getAttribute('data-service-name') || link.textContent.trim();
+        const serviceUrl = link.getAttribute('data-service-url');
+        
+        console.log(`Service clicked: ${serviceName} -> ${serviceUrl}`);
+        console.log('=== SERVICE CLICK DEBUG END ===');
+        
+        // If it's a valid URL, show modal, otherwise show error
+        if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
+            showServiceModal(serviceName, serviceUrl);
+        } else {
+            console.error('Invalid service URL:', serviceUrl);
+            showNotification('Service URL not available', 'error');
+        }
+    } else {
+        console.log('No service link with data-service-url found');
+        console.log('=== SERVICE CLICK DEBUG END ===');
     }
 }
 
@@ -625,7 +665,29 @@ function loadNationalServices() {
     });
 
     console.log('National services loaded successfully');
-    // Event delegation is already set up in initializeServiceLinks()
+    
+    // Add direct event listeners as fallback for national services too
+    setTimeout(() => {
+        const newNationalLinks = nationalGrid.querySelectorAll('a[data-service-url]');
+        console.log(`Found ${newNationalLinks.length} national service links after loading`);
+        
+        newNationalLinks.forEach((link, index) => {
+            const serviceName = link.getAttribute('data-service-name');
+            const serviceUrl = link.getAttribute('data-service-url');
+            console.log(`National link ${index + 1}: ${serviceName} -> ${serviceUrl}`);
+            
+            // Add direct click handler as fallback
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log(`Direct click handler fired for: ${serviceName}`);
+                if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
+                    showServiceModal(serviceName, serviceUrl);
+                } else {
+                    showNotification('Service URL not available', 'error');
+                }
+            });
+        });
+    }, 100);
 }
 
 // Load State Services for current state
@@ -679,7 +741,34 @@ function loadStateServices(stateKey) {
     }
 
     console.log(`State services loaded for ${stateServicesData[stateKey].name}`);
-    // Event delegation handles all service links automatically
+    
+    // Ensure event delegation is working for the newly loaded state services
+    // The event delegation on stateGrid should handle all dynamically added links
+    // But let's also add direct event listeners as a fallback
+    setTimeout(() => {
+        const newStateLinks = stateGrid.querySelectorAll('a[data-service-url]');
+        console.log(`Found ${newStateLinks.length} state service links after loading`);
+        
+        newStateLinks.forEach((link, index) => {
+            const serviceName = link.getAttribute('data-service-name');
+            const serviceUrl = link.getAttribute('data-service-url');
+            console.log(`State link ${index + 1}: ${serviceName} -> ${serviceUrl}`);
+            
+            // Add direct click handler as fallback
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log(`Direct click handler fired for: ${serviceName}`);
+                if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
+                    showServiceModal(serviceName, serviceUrl);
+                } else {
+                    showNotification('Service URL not available', 'error');
+                }
+            });
+        });
+        
+        // Re-initialize service links to ensure both methods work
+        initializeServiceLinks();
+    }, 100);
 }
 
 // Event listeners setup
@@ -813,6 +902,12 @@ window.testServiceModal = function() {
     showServiceModal('Test Service', 'https://www.google.com');
 };
 
+// Test function to open a real service directly
+window.testRealService = function() {
+    console.log('Testing real service - opening PAN Card service...');
+    showServiceModal('PAN Card', 'https://www.incometax.gov.in/iec/foportal/');
+};
+
 // Test function to check if all service links have proper data attributes
 window.debugServiceLinks = function() {
     const allLinks = document.querySelectorAll('a[data-service-url]');
@@ -824,7 +919,43 @@ window.debugServiceLinks = function() {
         console.log(`${index + 1}. ${name} -> ${url}`);
     });
     
+    // Test clicking the first link programmatically
+    if (allLinks.length > 0) {
+        console.log('Testing first link programmatically...');
+        allLinks[0].click();
+    }
+    
     return allLinks;
+};
+
+// Test function to verify all service links are working
+window.testAllServiceLinks = function() {
+    console.log('=== TESTING ALL SERVICE LINKS ===');
+    
+    // Test national services
+    const nationalLinks = document.querySelectorAll('#nationalServicesGrid a[data-service-url]');
+    console.log(`National Services: Found ${nationalLinks.length} links`);
+    nationalLinks.forEach((link, index) => {
+        const name = link.getAttribute('data-service-name');
+        const url = link.getAttribute('data-service-url');
+        console.log(`  ${index + 1}. ${name} -> ${url}`);
+    });
+    
+    // Test state services
+    const stateLinks = document.querySelectorAll('#stateServicesGrid a[data-service-url]');
+    console.log(`State Services: Found ${stateLinks.length} links`);
+    stateLinks.forEach((link, index) => {
+        const name = link.getAttribute('data-service-name');
+        const url = link.getAttribute('data-service-url');
+        console.log(`  ${index + 1}. ${name} -> ${url}`);
+    });
+    
+    console.log('=== END TEST ===');
+    return {
+        national: nationalLinks.length,
+        state: stateLinks.length,
+        total: nationalLinks.length + stateLinks.length
+    };
 };
 
 // Export functions for potential future use
