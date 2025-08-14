@@ -126,12 +126,8 @@ function directServiceLinkHandler(e) {
     console.log('=== DIRECT LINK HANDLER ===');
     console.log(`Direct click: ${serviceName} -> ${serviceUrl}`);
     
-    if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
-        showServiceModal(serviceName, serviceUrl);
-    } else {
-        console.error('Invalid service URL:', serviceUrl);
-        showNotification('Service URL not available', 'error');
-    }
+    // Open service directly instead of modal
+    openServiceDirectly(serviceName, serviceUrl);
 }
 
 // Handle service link clicks using event delegation
@@ -154,13 +150,8 @@ function handleServiceClick(e) {
         console.log(`Service clicked: ${serviceName} -> ${serviceUrl}`);
         console.log('=== SERVICE CLICK DEBUG END ===');
         
-        // If it's a valid URL, show modal, otherwise show error
-        if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
-            showServiceModal(serviceName, serviceUrl);
-        } else {
-            console.error('Invalid service URL:', serviceUrl);
-            showNotification('Service URL not available', 'error');
-        }
+        // Open service directly instead of showing modal
+        openServiceDirectly(serviceName, serviceUrl);
     } else {
         console.log('No service link with data-service-url found');
         console.log('=== SERVICE CLICK DEBUG END ===');
@@ -680,11 +671,7 @@ function loadNationalServices() {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 console.log(`Direct click handler fired for: ${serviceName}`);
-                if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
-                    showServiceModal(serviceName, serviceUrl);
-                } else {
-                    showNotification('Service URL not available', 'error');
-                }
+                openServiceDirectly(serviceName, serviceUrl);
             });
         });
     }, 100);
@@ -758,17 +745,31 @@ function loadStateServices(stateKey) {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 console.log(`Direct click handler fired for: ${serviceName}`);
-                if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
-                    showServiceModal(serviceName, serviceUrl);
-                } else {
-                    showNotification('Service URL not available', 'error');
-                }
+                openServiceDirectly(serviceName, serviceUrl);
             });
         });
         
         // Re-initialize service links to ensure both methods work
         initializeServiceLinks();
     }, 100);
+}
+
+// Direct service opener - bypasses modal for immediate access
+function openServiceDirectly(serviceName, serviceUrl) {
+    console.log(`Opening service directly: ${serviceName} -> ${serviceUrl}`);
+    
+    if (serviceUrl && serviceUrl !== '#' && serviceUrl !== '') {
+        // Show a brief notification
+        showNotification(`Opening ${serviceName}...`, 'success');
+        
+        // Open the service directly
+        window.open(serviceUrl, '_blank');
+        
+        console.log(`Successfully opened: ${serviceUrl}`);
+    } else {
+        console.error('Invalid service URL:', serviceUrl);
+        showNotification('Service URL not available', 'error');
+    }
 }
 
 // Event listeners setup
@@ -905,7 +906,13 @@ window.testServiceModal = function() {
 // Test function to open a real service directly
 window.testRealService = function() {
     console.log('Testing real service - opening PAN Card service...');
-    showServiceModal('PAN Card', 'https://www.incometax.gov.in/iec/foportal/');
+    openServiceDirectly('PAN Card', 'https://www.incometax.gov.in/iec/foportal/');
+};
+
+// Quick test for Aadhaar card
+window.testAadhaar = function() {
+    console.log('Testing Aadhaar service...');
+    openServiceDirectly('Aadhaar Card', 'https://uidai.gov.in/');
 };
 
 // Test function to check if all service links have proper data attributes
