@@ -1022,45 +1022,6 @@ function loadStateServices(stateKey) {
     }
 }
 
-// Toggle National Services
-function toggleNationalServices() {
-    const nationalGrid = document.getElementById('nationalServicesGrid');
-    const toggleBtn = document.getElementById('nationalToggleBtn');
-    
-    if (nationalGrid && toggleBtn) {
-        if (nationalGrid.style.display === 'none') {
-            nationalGrid.style.display = 'block';
-            toggleBtn.classList.remove('collapsed');
-            toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
-        } else {
-            nationalGrid.style.display = 'none';
-            toggleBtn.classList.add('collapsed');
-            toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
-        }
-    }
-}
-
-// Toggle State Services
-function toggleStateServices() {
-    const stateGrid = document.getElementById('stateServicesGrid');
-    const stateFilter = document.getElementById('stateServicesFilter');
-    const toggleBtn = document.getElementById('stateToggleBtn');
-    
-    if (stateGrid && stateFilter && toggleBtn) {
-        if (stateGrid.style.display === 'none') {
-            stateGrid.style.display = 'block';
-            stateFilter.style.display = 'block';
-            toggleBtn.classList.remove('collapsed');
-            toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
-        } else {
-            stateGrid.style.display = 'none';
-            stateFilter.style.display = 'none';
-            toggleBtn.classList.add('collapsed');
-            toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
-        }
-    }
-}
-
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Check authentication first
