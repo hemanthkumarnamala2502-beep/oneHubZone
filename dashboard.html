@@ -122,157 +122,24 @@
     <!-- Services Categories -->
     <section class="services" id="services">
         <div class="container">
-            <h2>All Citizen Services</h2>
+            <!-- National Services Section -->
+            <h2>National Services</h2>
+            <p class="section-subtitle">Services available across all states</p>
+            <div class="services-grid" id="nationalServicesGrid">
+                <!-- National services will be loaded here by JavaScript -->
+            </div>
+
+            <!-- State Services Section -->
+            <h2>State-Specific Services</h2>
+            <p class="section-subtitle">Services specific to <span id="currentState">your selected state</span></p>
             <div class="services-filter">
                 <button class="filter-btn active" data-filter="all">All Services</button>
                 <button class="filter-btn" data-filter="popular">Most Popular</button>
                 <button class="filter-btn" data-filter="recent">Recently Used</button>
                 <button class="filter-btn" data-filter="favorites">Favorites</button>
             </div>
-            <div class="services-grid">
-                <!-- Identity & Documentation -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-id-card"></i>
-                        <h3>Identity & Documentation</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="https://ts.meeseva.telangana.gov.in/TSPortalgchu/UserInterface/Citizen/CDMA/UnifiedSearchBirthDeathRecords.aspx?ServiceType=1" target="_blank"><i class="fas fa-certificate"></i> Birth Certificate</a></li>
-                        <li><a href="https://portal2.passportindia.gov.in/AppOnlineProject/welcomeLink" target="_blank"><i class="fas fa-passport"></i> Passport Application</a></li>
-                        <li><a href="https://voters.eci.gov.in/" target="_blank"> <i class="fas fa-id-badge"></i> National ID Card</a></li>
-                        <li><a href="#"><i class="fas fa-ring"></i> Marriage Certificate</a></li>
-                        <li><a href="#"><i class="fas fa-cross"></i> Death Certificate</a></li>
-                        <li><a href="#"><i class="fas fa-users"></i> Family Registration</a></li>
-                    </ul>
-                </div>
-
-                <!-- Business & Licensing -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-briefcase"></i>
-                        <h3>Business & Licensing</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="#"><i class="fas fa-building"></i> Business Registration</a></li>
-                        <li><a href="#"><i class="fas fa-file-contract"></i> Trade License</a></li>
-                        <li><a href="#"><i class="fas fa-industry"></i> Industrial License</a></li>
-                        <li><a href="#"><i class="fas fa-utensils"></i> Food License</a></li>
-                        <li><a href="#"><i class="fas fa-fire"></i> Fire Safety Certificate</a></li>
-                        <li><a href="#"><i class="fas fa-shield-alt"></i> Environmental Clearance</a></li>
-                    </ul>
-                </div>
-
-                <!-- Transportation -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-car"></i>
-                        <h3>Transportation</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="https://transport.telangana.gov.in/" target="_blank"> <i class="fas fa-id-card-alt"></i> Driver's License</a></li>
-                        <li><a href="#"><i class="fas fa-car"></i> Vehicle Registration</a></li>
-                        <li><a href="#"><i class="fas fa-clipboard-check"></i> Vehicle Inspection</a></li>
-                        <li><a href="#"><i class="fas fa-road"></i> Road Tax Payment</a></li>
-                        <li><a href="#"><i class="fas fa-motorcycle"></i> Motorcycle License</a></li>
-                        <li><a href="#"><i class="fas fa-truck"></i> Commercial Vehicle Permit</a></li>
-                    </ul>
-                </div>
-
-                <!-- Property & Housing -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-home"></i>
-                        <h3>Property & Housing</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="#"><i class="fas fa-file-alt"></i> Property Registration</a></li>
-                        <li><a href="#"><i class="fas fa-hammer"></i> Building Permits</a></li>
-                        <li><a href="#"><i class="fas fa-home"></i> Housing Schemes</a></li>
-                        <li><a href="#"><i class="fas fa-money-bill-wave"></i> Property Tax</a></li>
-                        <li><a href="#"><i class="fas fa-map"></i> Land Survey</a></li>
-                        <li><a href="#"><i class="fas fa-clipboard-list"></i> Occupancy Certificate</a></li>
-                    </ul>
-                </div>
-
-                <!-- Health & Welfare -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-heartbeat"></i>
-                        <h3>Health & Welfare</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="#"><i class="fas fa-user-md"></i> Health Card Registration</a></li>
-                        <li><a href="https://www.covid19india.org/covid-19-vaccine-certificate/" target="_blank"> <i class="fas fa-syringe"></i> Vaccination Certificate</a></li>
-                        <li><a href="#"><i class="fas fa-wheelchair"></i> Disability Certificate</a></li>
-                        <li><a href="#"><i class="fas fa-hand-holding-heart"></i> Welfare Schemes</a></li>
-                        <li><a href="#"><i class="fas fa-baby"></i> Maternity Benefits</a></li>
-                        <li><a href="#"><i class="fas fa-pills"></i> Medical License</a></li>
-                    </ul>
-                </div>
-
-                <!-- Education -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>Education</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="file:///C:/Users/2016334/Vibecode/college.html"  target="_blank"><i class="fas fa-graduation-cap"></i> College Education</a></li>
-                        <li><a href="#"><i class="fas fa-certificate"></i> Educational Certificates</a></li>
-                        <li><a href="#"><i class="fas fa-graduation-cap"></i> Scholarship Application</a></li>
-                        <li><a href="#"><i class="fas fa-book"></i> Library Card</a></li>
-                        <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Teacher Registration</a></li>
-                        <li><a href="#"><i class="fas fa-university"></i> University Services</a></li>
-                    </ul>
-                </div>
-
-                <!-- Utilities -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-bolt"></i>
-                        <h3>Utilities</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="#"><i class="fas fa-lightbulb"></i> Electricity Connection</a></li>
-                        <li><a href="#"><i class="fas fa-tint"></i> Water Connection</a></li>
-                        <li><a href="#"><i class="fas fa-bank"></i> ATM location</a></li>
-                        <li><a href="#"><i class="fas fa-wifi"></i> Internet Connection</a></li>
-                        <li><a href="#"><i class="fas fa-trash"></i> Waste Management</a></li>
-                        <li><a href="#"><i class="fas fa-phone"></i> Telephone Connection</a></li>
-                    </ul>
-                </div>
-
-                <!-- Financial Services -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-coins"></i>
-                        <h3>Financial Services</h3>
-                    </div>
-                    <div class="service-list">
-                        <li><a href="file:///C:/Users/2016334/VS%20Code/PF%20file/index.html#epfo" target="_blank" class="fas fa-receipt">EPFO services</a></li>
-                        <li><a href="file:///C:/Users/2016334/Vibecode/index.html" target="_blank"><i class="fas fa-percentage"></i> Bank Services</a></li>
-                        <li><a href="#"><i class="fas fa-hand-holding-usd"></i> Loan Applications</a></li>
-                        <li><a href="#"><i class="fas fa-piggy-bank"></i> Savings Schemes</a></li>
-                        <li><a href="#"><i class="fas fa-chart-pie"></i> Investment Services</a></li>
-                        <li><a href="#"><i class="fas fa-receipt"></i> Payment Services</a></li>
-                    </div>
-                </div>
-
-                <!-- Legal Services -->
-                <div class="service-category">
-                    <div class="category-header">
-                        <i class="fas fa-balance-scale"></i>
-                        <h3>Legal Services</h3>
-                    </div>
-                    <ul class="service-list">
-                        <li><a href="#"><i class="fas fa-gavel"></i> Court Services</a></li>
-                        <li><a href="#"><i class="fas fa-file-signature"></i> Legal Documentation</a></li>
-                        <li><a href="#"><i class="fas fa-handshake"></i> Legal Aid</a></li>
-                        <li><a href="#"><i class="fas fa-stamp"></i> Notarization</a></li>
-                        <li><a href="#"><i class="fas fa-search"></i> Case Status</a></li>
-                        <li><a href="#"><i class="fas fa-user-tie"></i> Lawyer Registration</a></li>
-                    </ul>
-                </div>
+            <div class="services-grid" id="stateServicesGrid">
+                <!-- State-specific services will be loaded here by JavaScript -->
             </div>
         </div>
     </section>

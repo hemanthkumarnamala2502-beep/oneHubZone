@@ -576,42 +576,70 @@ function addLoadingState(element, duration = 1000) {
     }, duration);
 }
 
+// National Services (Common for all states)
+const nationalServices = {
+    'National Identity & Documentation': [
+        { name: 'Aadhaar Card', icon: 'fa-id-card', url: 'https://uidai.gov.in/' },
+        { name: 'PAN Card', icon: 'fa-credit-card', url: 'https://www.incometax.gov.in/iec/foportal/' },
+        { name: 'Voter ID Card', icon: 'fa-vote-yea', url: 'https://voters.eci.gov.in/' },
+        { name: 'Passport', icon: 'fa-passport', url: 'https://passportindia.gov.in/' }
+    ],
+    'National Employment & Finance': [
+        { name: 'EPFO Services', icon: 'fa-piggy-bank', url: 'https://www.epfindia.gov.in/' },
+        { name: 'ESIC Services', icon: 'fa-medkit', url: 'https://www.esic.nic.in/' },
+        { name: 'Income Tax Filing', icon: 'fa-file-invoice-dollar', url: 'https://www.incometax.gov.in/' },
+        { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://www.gst.gov.in/' }
+    ],
+    'National Transportation': [
+        { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://parivahan.gov.in/' },
+        { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://parivahan.gov.in/' },
+        { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://parivahan.gov.in/' },
+        { name: 'International Driving Permit', icon: 'fa-globe', url: 'https://parivahan.gov.in/' }
+    ],
+    'National Banking & Schemes': [
+        { name: 'Jan Dhan Account', icon: 'fa-university', url: 'https://pmjdy.gov.in/' },
+        { name: 'Mudra Loan', icon: 'fa-hand-holding-usd', url: 'https://www.mudra.org.in/' },
+        { name: 'Kisan Credit Card', icon: 'fa-tractor', url: 'https://pmkisan.gov.in/' },
+        { name: 'Digital India Services', icon: 'fa-digital-tachograph', url: 'https://digitalindia.gov.in/' }
+    ]
+};
+
 // State-specific services data
 const stateServicesData = {
     telangana: {
         name: 'Telangana',
         services: {
             'Identity & Documentation': [
-                { name: 'Telangana Voter ID Card', icon: 'fa-id-card', url: 'https://www.nvsp.in/' },
-                { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Death Certificate', icon: 'fa-cross', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Caste Certificate', icon: 'fa-id-badge', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://webland.telangana.gov.in/' }
+                { name: 'Voter ID Card', icon: 'fa-id-card', url: 'https://voters.eci.gov.in/login' },
+                { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Death Certificate', icon: 'fa-cross', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Caste Certificate', icon: 'fa-id-badge', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' }
             ],
             'Business & Licensing': [
-                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://tspcb.cgg.gov.in/' },
-                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://www.gst.gov.in/' },
-                { name: 'Trade License', icon: 'fa-industry', url: 'https://municipalities.telangana.gov.in/' },
-                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://www.fssai.gov.in/' },
-                { name: 'Pollution Control Board NOC', icon: 'fa-shield-alt', url: 'https://tspcb.cgg.gov.in/' },
-                { name: 'Professional Tax Registration', icon: 'fa-receipt', url: 'https://cfo.telangana.gov.in/' }
+                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://industries.telangana.gov.in/tsipass/' },
+                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://services.gst.gov.in/services/login' },
+                { name: 'Trade License', icon: 'fa-industry', url: 'https://ghmc.gov.in/onlineservices/trade-license/' },
+                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://foscos.fssai.gov.in/portal/' },
+                { name: 'Pollution Control Board NOC', icon: 'fa-shield-alt', url: 'https://tspcb.cgg.gov.in/CTE_CTO_Online_Services.html' },
+                { name: 'Professional Tax Registration', icon: 'fa-receipt', url: 'https://cfo.telangana.gov.in/cfo/professionalTax.htm' }
             ],
             'Transportation': [
-                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Vehicle Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Road Tax Payment', icon: 'fa-road', url: 'https://transport.telangana.gov.in/' },
-                { name: 'International Driving Permit', icon: 'fa-globe', url: 'https://parivahan.gov.in/parivahan/' }
+                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Vehicle Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Road Tax Payment', icon: 'fa-road', url: 'https://transport.telangana.gov.in/html/eservices.html' },
+                { name: 'International Driving Permit', icon: 'fa-globe', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' }
             ],
             'Property & Housing': [
-                { name: 'Property Registration', icon: 'fa-home', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Building Approval', icon: 'fa-hammer', url: 'https://municipalities.telangana.gov.in/' },
-                { name: 'Patta Transfer', icon: 'fa-exchange-alt', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Survey Settlement', icon: 'fa-map', url: 'https://webland.telangana.gov.in/' },
-                { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://municipalities.telangana.gov.in/' },
-                { name: 'Occupancy Rights', icon: 'fa-key', url: 'https://webland.telangana.gov.in/' }
+                { name: 'Property Registration', icon: 'fa-home', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Building Approval', icon: 'fa-hammer', url: 'https://ghmc.gov.in/onlineservices/building-permission/' },
+                { name: 'Patta Transfer', icon: 'fa-exchange-alt', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Survey Settlement', icon: 'fa-map', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' },
+                { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://ghmc.gov.in/onlineservices/property-tax/' },
+                { name: 'Occupancy Rights', icon: 'fa-key', url: 'https://webland.telangana.gov.in/webland/jsp/common/homeAction.action' }
             ]
         }
     },
@@ -619,36 +647,36 @@ const stateServicesData = {
         name: 'Tamil Nadu',
         services: {
             'Identity & Documentation': [
-                { name: 'Tamil Nadu Voter ID Card', icon: 'fa-id-card', url: 'https://www.nvsp.in/' },
-                { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://edistrict.tn.gov.in/' },
-                { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://edistrict.tn.gov.in/' },
-                { name: 'Death Certificate', icon: 'fa-cross', url: 'https://edistrict.tn.gov.in/' },
-                { name: 'Community Certificate', icon: 'fa-users', url: 'https://edistrict.tn.gov.in/' },
-                { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://edistrict.tn.gov.in/' }
+                { name: 'Voter ID Card', icon: 'fa-id-card', url: 'https://voters.eci.gov.in/login' },
+                { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://serviceonline.gov.in/serviceLinkHome.html?serviceToken=H7v1muo7au&newLink=N&%3Ccsrf:token%20uri=%27serviceLinkHome.html%27/%3E' },
+                { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://serviceonline.gov.in/serviceLinkHome.html?serviceToken=H7v1muo7au&newLink=N&%3Ccsrf:token%20uri=%27serviceLinkHome.html%27/%3E' },
+                { name: 'Death Certificate', icon: 'fa-cross', url: 'https://serviceonline.gov.in/serviceLinkHome.html?serviceToken=H7v1muo7au&newLink=N&%3Ccsrf:token%20uri=%27serviceLinkHome.html%27/%3E' },
+                { name: 'Community Certificate', icon: 'fa-users', url: 'https://serviceonline.gov.in/serviceLinkHome.html?serviceToken=H7v1muo7au&newLink=N&%3Ccsrf:token%20uri=%27serviceLinkHome.html%27/%3E' },
+                { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://serviceonline.gov.in/serviceLinkHome.html?serviceToken=H7v1muo7au&newLink=N&%3Ccsrf:token%20uri=%27serviceLinkHome.html%27/%3E' }
             ],
             'Business & Licensing': [
-                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://tnpcb.gov.in/' },
-                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://www.gst.gov.in/' },
-                { name: 'Trade License', icon: 'fa-industry', url: 'https://www.tntax.gov.in/' },
-                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://www.fssai.gov.in/' },
-                { name: 'Factory License', icon: 'fa-industry', url: 'https://tnpcb.gov.in/' },
-                { name: 'Professional Tax Certificate', icon: 'fa-receipt', url: 'https://www.tntax.gov.in/' }
+                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://www.investingintamilnadu.com/single-window-clearance' },
+                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://services.gst.gov.in/services/login' },
+                { name: 'Trade License', icon: 'fa-industry', url: 'https://www.tntax.gov.in/tntax/' },
+                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://foscos.fssai.gov.in/portal/' },
+                { name: 'Factory License', icon: 'fa-industry', url: 'https://tnpcb.gov.in/pdf/OnlineServices.pdf' },
+                { name: 'Professional Tax Certificate', icon: 'fa-receipt', url: 'https://www.tntax.gov.in/ptax/ptax.htm' }
             ],
             'Transportation': [
-                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://tnrto.gov.in/' },
-                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://tnrto.gov.in/' }
+                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://tnrto.gov.in/online_tax_payment.html' },
+                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://tnrto.gov.in/permit_services.html' }
             ],
             'Property & Housing': [
-                { name: 'Property Registration', icon: 'fa-home', url: 'https://tnreginet.gov.in/' },
-                { name: 'Building Plan Approval', icon: 'fa-hammer', url: 'https://tn.gov.in/' },
-                { name: 'Patta & Chitta', icon: 'fa-file-alt', url: 'https://webland.tn.gov.in/' },
-                { name: 'Survey Settlement', icon: 'fa-map', url: 'https://webland.tn.gov.in/' },
-                { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://tn.gov.in/' },
-                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://www.tnhb.tn.gov.in/' }
+                { name: 'Property Registration', icon: 'fa-home', url: 'https://tnreginet.gov.in/portal/login' },
+                { name: 'Building Plan Approval', icon: 'fa-hammer', url: 'https://www.chennaicorporation.gov.in/building-plan-approval/' },
+                { name: 'Patta & Chitta', icon: 'fa-file-alt', url: 'https://webland.tn.gov.in/portal/login' },
+                { name: 'Survey Settlement', icon: 'fa-map', url: 'https://webland.tn.gov.in/portal/login' },
+                { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://www.chennaicorporation.gov.in/property-tax-online/' },
+                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://www.tnhb.tn.gov.in/online-services.html' }
             ]
         }
     },
@@ -656,28 +684,28 @@ const stateServicesData = {
         name: 'Andhra Pradesh',
         services: {
             'Identity & Documentation': [
-                { name: 'AP Voter ID Card', icon: 'fa-id-card', url: 'https://www.nvsp.in/' },
-                { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://webland.ap.gov.in/' },
-                { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://webland.ap.gov.in/' },
-                { name: 'Death Certificate', icon: 'fa-cross', url: 'https://webland.ap.gov.in/' },
-                { name: 'Caste Certificate', icon: 'fa-users', url: 'https://webland.ap.gov.in/' },
-                { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://webland.ap.gov.in/' }
+                { name: 'Voter ID Card', icon: 'fa-id-card', url: 'https://voters.eci.gov.in/login' },
+                { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://webland.ap.gov.in/VRO/' },
+                { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://webland.ap.gov.in/VRO/' },
+                { name: 'Death Certificate', icon: 'fa-cross', url: 'https://webland.ap.gov.in/VRO/' },
+                { name: 'Caste Certificate', icon: 'fa-users', url: 'https://webland.ap.gov.in/VRO/' },
+                { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://webland.ap.gov.in/VRO/' }
             ],
             'Business & Licensing': [
                 { name: 'AP Shop & Establishment License', icon: 'fa-building', url: 'https://appcb.ap.gov.in/' },
-                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://www.gst.gov.in/' },
+                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://services.gst.gov.in/services/login' },
                 { name: 'Trade License', icon: 'fa-industry', url: 'https://webland.ap.gov.in/' },
-                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://www.fssai.gov.in/' },
-                { name: 'Industrial License', icon: 'fa-cogs', url: 'https://appcb.ap.gov.in/' },
-                { name: 'Professional Tax Registration', icon: 'fa-receipt', url: 'https://webland.ap.gov.in/' }
+                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://foscos.fssai.gov.in/' },
+                { name: 'Industrial License', icon: 'fa-cogs', url: 'https://appcb.ap.gov.in/OnlineServices.do' },
+                { name: 'Professional Tax Registration', icon: 'fa-receipt', url: 'https://cfo.ap.gov.in/' }
             ],
             'Transportation': [
-                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Road Tax & Fees', icon: 'fa-road', url: 'https://transport.ap.gov.in/' },
-                { name: 'Permit Application', icon: 'fa-file-alt', url: 'https://transport.ap.gov.in/' }
+                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Road Tax & Fees', icon: 'fa-road', url: 'https://aptransport.org/online-services/' },
+                { name: 'Permit Application', icon: 'fa-file-alt', url: 'https://aptransport.org/online-services/' }
             ],
             'Property & Housing': [
                 { name: 'Property Registration', icon: 'fa-home', url: 'https://webland.ap.gov.in/' },
@@ -693,7 +721,7 @@ const stateServicesData = {
         name: 'Maharashtra',
         services: {
             'Identity & Documentation': [
-                { name: 'Maharashtra Voter ID Card', icon: 'fa-id-card', url: 'https://www.nvsp.in/' },
+                { name: 'Voter ID Card', icon: 'fa-id-card', url: 'https://voters.eci.gov.in/login' },
                 { name: 'Birth Certificate', icon: 'fa-certificate', url: 'https://aaplesarkar.mahaonline.gov.in/' },
                 { name: 'Marriage Certificate', icon: 'fa-ring', url: 'https://aaplesarkar.mahaonline.gov.in/' },
                 { name: 'Death Certificate', icon: 'fa-cross', url: 'https://aaplesarkar.mahaonline.gov.in/' },
@@ -701,35 +729,35 @@ const stateServicesData = {
                 { name: 'Income Certificate', icon: 'fa-file-invoice-dollar', url: 'https://aaplesarkar.mahaonline.gov.in/' }
             ],
             'Business & Licensing': [
-                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://mpcb.gov.in/' },
-                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://www.gst.gov.in/' },
+                { name: 'Shop & Establishment License', icon: 'fa-building', url: 'https://mahafacilitation.gov.in/' },
+                { name: 'GST Registration', icon: 'fa-file-contract', url: 'https://services.gst.gov.in/services/login' },
                 { name: 'Trade License', icon: 'fa-industry', url: 'https://aaplesarkar.mahaonline.gov.in/' },
-                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://www.fssai.gov.in/' },
-                { name: 'Factory License', icon: 'fa-cogs', url: 'https://mpcb.gov.in/' },
+                { name: 'Food License (FSSAI)', icon: 'fa-utensils', url: 'https://foscos.fssai.gov.in/' },
+                { name: 'Factory License', icon: 'fa-cogs', url: 'https://mpcb.gov.in/online-services' },
                 { name: 'Professional Tax Certificate', icon: 'fa-receipt', url: 'https://aaplesarkar.mahaonline.gov.in/' }
             ],
             'Transportation': [
-                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://parivahan.gov.in/parivahan/' },
-                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://transport.maharashtra.gov.in/' },
-                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://transport.maharashtra.gov.in/' }
+                { name: 'Driving License', icon: 'fa-id-card-alt', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Vehicle Registration', icon: 'fa-car', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Learning License', icon: 'fa-graduation-cap', url: 'https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do' },
+                { name: 'Fitness Certificate', icon: 'fa-clipboard-check', url: 'https://vahan.parivahan.gov.in/vahanservice/vahan/ui/stateSelection/form.action' },
+                { name: 'Motor Vehicle Tax', icon: 'fa-road', url: 'https://transport.maharashtra.gov.in/1035/Online-Services' },
+                { name: 'Permit Services', icon: 'fa-file-alt', url: 'https://transport.maharashtra.gov.in/1035/Online-Services' }
             ],
             'Property & Housing': [
                 { name: 'Property Registration', icon: 'fa-home', url: 'https://aaplesarkar.mahaonline.gov.in/' },
                 { name: 'Building Plan Approval', icon: 'fa-hammer', url: 'https://aaplesarkar.mahaonline.gov.in/' },
-                { name: '7/12 Extract', icon: 'fa-file-alt', url: 'https://webland.maharashtra.gov.in/' },
-                { name: '8A Extract', icon: 'fa-map', url: 'https://webland.maharashtra.gov.in/' },
+                { name: '7/12 Extract', icon: 'fa-file-alt', url: 'https://bhulekh.mahabhumi.gov.in/' },
+                { name: '8A Extract', icon: 'fa-map', url: 'https://bhulekh.mahabhumi.gov.in/' },
                 { name: 'Property Tax', icon: 'fa-money-bill-wave', url: 'https://aaplesarkar.mahaonline.gov.in/' },
-                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://mhada.maharashtra.gov.in/' }
+                { name: 'Housing Board Services', icon: 'fa-building', url: 'https://mhada.maharashtra.gov.in/english' }
             ]
         }
     }
 };
 
 // Current selected state
-let currentState = 'california';
+let currentState = 'telangana';
 
 // DOM Elements for state functionality
 const stateSelector = document.getElementById('stateSelect');
@@ -917,6 +945,44 @@ function loadStatePreference() {
     }
 }
 
+// Load National Services
+function loadNationalServices() {
+    const nationalGrid = document.getElementById('nationalServicesGrid');
+    if (!nationalGrid) return;
+
+    nationalGrid.innerHTML = '';
+
+    Object.keys(nationalServices).forEach(categoryName => {
+        const services = nationalServices[categoryName];
+        
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'service-category';
+        
+        const categoryIcon = getCategoryIcon(categoryName);
+        categoryDiv.innerHTML = `
+            <div class="category-header">
+                <i class="fas ${categoryIcon}"></i>
+                <h3>${categoryName}</h3>
+            </div>
+            <ul class="service-list">
+                ${services.map(service => `
+                    <li>
+                        <a href="#" data-service-name="${service.name}" data-service-url="${service.url}">
+                            <i class="fas ${service.icon}"></i> 
+                            ${service.name}
+                        </a>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+        nationalGrid.appendChild(categoryDiv);
+    });
+
+    // Initialize national service links
+    initializeNationalServiceLinks();
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     // Check authentication first
@@ -926,6 +992,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('OneHub Zone - Citizen Services Dashboard Loaded');
     initializeDashboard();
     initializeStateSelector();
+    loadNationalServices();
     
     // Add stagger animation to service categories
     const serviceCategories = document.querySelectorAll('.service-category');
