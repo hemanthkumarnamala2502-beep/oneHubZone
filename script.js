@@ -846,6 +846,9 @@ function switchState(newState) {
     
     currentState = newState;
     
+    // Always ensure national services are visible
+    loadNationalServices();
+    
     // Load state services
     loadStateServices(newState);
     
@@ -1045,10 +1048,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.animationDelay = `${index * 0.1}s`;
     });
     
-    // Load national services
-    loadNationalServices();
-    
-    // Load saved state preference (this will also load state services)
+    // Load saved state preference (this will also load both national and state services)
     loadStatePreference();
 });
 
