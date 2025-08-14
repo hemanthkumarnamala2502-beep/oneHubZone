@@ -807,6 +807,26 @@ function createTestSession() {
     return testUser;
 }
 
+// Test function for debugging - can be called from console
+window.testServiceModal = function() {
+    console.log('Testing service modal...');
+    showServiceModal('Test Service', 'https://www.google.com');
+};
+
+// Test function to check if all service links have proper data attributes
+window.debugServiceLinks = function() {
+    const allLinks = document.querySelectorAll('a[data-service-url]');
+    console.log(`Found ${allLinks.length} service links:`);
+    
+    allLinks.forEach((link, index) => {
+        const name = link.getAttribute('data-service-name');
+        const url = link.getAttribute('data-service-url');
+        console.log(`${index + 1}. ${name} -> ${url}`);
+    });
+    
+    return allLinks;
+};
+
 // Export functions for potential future use
 window.OneHubZone = {
     search: performSearch,
