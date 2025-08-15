@@ -673,208 +673,29 @@ body {
     }
 }
 
-/* Independence Day Theme Styles for Login Page */
-.independence-banner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
-    padding: 12px 20px;
-    z-index: 1000;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    border-bottom: 3px solid #ff9933;
-    animation: bannerSlideDown 0.8s ease-out;
-}
-
-.banner-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.flag-animation {
-    display: flex;
-    align-items: center;
-}
-
-.flag {
-    width: 45px;
-    height: 30px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    animation: flagWave 3s ease-in-out infinite;
-}
-
-.flag-stripe {
-    height: 10px;
-    position: relative;
-}
-
-.flag-stripe.saffron {
-    background: #ff9933;
-}
-
-.flag-stripe.white {
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flag-stripe.green {
-    background: #138808;
-}
-
-.chakra {
-    width: 8px;
-    height: 8px;
-    border: 1px solid #000080;
-    border-radius: 50%;
-    position: relative;
-    animation: chakraRotate 8s linear infinite;
-}
-
-.spoke {
-    position: absolute;
-    width: 1px;
-    height: 4px;
-    background: #000080;
-    left: 50%;
-    top: 50%;
-    transform-origin: center bottom;
-    margin-left: -0.5px;
-    margin-top: -4px;
-}
-
-.banner-text h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-    color: #1e293b;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-.banner-text p {
-    font-size: 12px;
-    margin: 0;
-    color: #374151;
-    font-weight: 500;
-}
-
-.celebration-elements {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.sparkle {
-    font-size: 16px;
-    animation: sparkleEffect 2s ease-in-out infinite alternate;
-}
-
-.sparkle:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.sparkle:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes bannerSlideDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes flagWave {
-    0%, 100% { transform: rotate(-2deg); }
-    50% { transform: rotate(2deg); }
-}
-
-@keyframes chakraRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes sparkleEffect {
-    0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
-    100% { transform: scale(1.2) rotate(180deg); opacity: 1; }
-}
-
-/* Adjust login container to account for banner */
-body .login-container {
-    margin-top: 70px;
-    min-height: calc(100vh - 70px);
-}
-
-/* Mobile responsiveness for Independence Day banner */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .independence-banner {
-        padding: 8px 15px;
+    .login-content {
+        padding: 1rem;
     }
     
-    .banner-content {
-        gap: 15px;
+    .login-form-container {
+        padding: 2rem 1.5rem;
+        max-width: 100%;
+        width: 100%;
     }
     
-    .banner-text h2 {
-        font-size: 16px;
-    }
-    
-    .banner-text p {
-        font-size: 11px;
-    }
-    
-    .flag {
-        width: 35px;
-        height: 24px;
-    }
-    
-    .chakra {
-        width: 6px;
-        height: 6px;
-    }
-    
-    .spoke {
-        height: 3px;
-        margin-top: -3px;
-    }
-    
-    body .login-container {
-        margin-top: 60px;
-        min-height: calc(100vh - 60px);
+    .form-title {
+        font-size: 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
-    .banner-content {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
+    .login-form-container {
+        padding: 1.5rem 1rem;
     }
     
-    .banner-text h2 {
-        font-size: 14px;
-    }
-    
-    .banner-text p {
-        font-size: 10px;
-    }
-    
-    body .login-container {
-        margin-top: 80px;
-        min-height: calc(100vh - 80px);
+    .logo {
+        font-size: 1.25rem;
     }
 }

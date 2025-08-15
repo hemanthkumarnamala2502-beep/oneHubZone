@@ -646,205 +646,100 @@ body {
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* Independence Day Theme Styles for Landing Page */
-.independence-banner {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #ff9933 0%, #ffffff 50%, #138808 100%);
-    padding: 12px 20px;
-    z-index: 1000;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-    border-bottom: 3px solid #ff9933;
-    animation: bannerSlideDown 0.8s ease-out;
-}
-
-.banner-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.flag-animation {
-    display: flex;
-    align-items: center;
-}
-
-.flag {
-    width: 45px;
-    height: 30px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    animation: flagWave 3s ease-in-out infinite;
-}
-
-.flag-stripe {
-    height: 10px;
-    position: relative;
-}
-
-.flag-stripe.saffron {
-    background: #ff9933;
-}
-
-.flag-stripe.white {
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flag-stripe.green {
-    background: #138808;
-}
-
-.chakra {
-    width: 8px;
-    height: 8px;
-    border: 1px solid #000080;
-    border-radius: 50%;
-    position: relative;
-    animation: chakraRotate 8s linear infinite;
-}
-
-.spoke {
-    position: absolute;
-    width: 1px;
-    height: 4px;
-    background: #000080;
-    left: 50%;
-    top: 50%;
-    transform-origin: center bottom;
-    margin-left: -0.5px;
-    margin-top: -4px;
-}
-
-.banner-text h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-    color: #1e293b;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-.banner-text p {
-    font-size: 12px;
-    margin: 0;
-    color: #374151;
-    font-weight: 500;
-}
-
-.celebration-elements {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.sparkle {
-    font-size: 16px;
-    animation: sparkleEffect 2s ease-in-out infinite alternate;
-}
-
-.sparkle:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.sparkle:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes bannerSlideDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
+/* Responsive Design */
+@media (max-width: 968px) {
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
     }
-    to {
-        transform: translateY(0);
-        opacity: 1;
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .services-preview {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 }
 
-@keyframes flagWave {
-    0%, 100% { transform: rotate(-2deg); }
-    50% { transform: rotate(2deg); }
-}
-
-@keyframes chakraRotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes sparkleEffect {
-    0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
-    100% { transform: scale(1.2) rotate(180deg); opacity: 1; }
-}
-
-/* Adjust landing container to account for banner */
-body .landing-container {
-    margin-top: 70px;
-}
-
-/* Mobile responsiveness for Independence Day banner */
 @media (max-width: 768px) {
-    .independence-banner {
-        padding: 8px 15px;
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
     }
-    
-    .banner-content {
-        gap: 15px;
+
+    .nav {
+        gap: 1rem;
     }
-    
-    .banner-text h2 {
-        font-size: 16px;
+
+    .hero {
+        padding: 3rem 0;
     }
-    
-    .banner-text p {
-        font-size: 11px;
+
+    .hero-text h1 {
+        font-size: 2rem;
     }
-    
-    .flag {
-        width: 35px;
-        height: 24px;
+
+    .hero-description {
+        font-size: 1rem;
     }
-    
-    .chakra {
-        width: 6px;
-        height: 6px;
+
+    .hero-features {
+        justify-content: center;
+        gap: 1rem;
     }
-    
-    .spoke {
-        height: 3px;
-        margin-top: -3px;
+
+    .section-header h2 {
+        font-size: 2rem;
     }
-    
-    body .landing-container {
-        margin-top: 60px;
+
+    .features,
+    .services-overview,
+    .cta-section {
+        padding: 3rem 0;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .cta-actions {
+        flex-direction: column;
+        align-items: center;
     }
 }
 
 @media (max-width: 480px) {
-    .banner-content {
+    .container {
+        padding: 0 0.5rem;
+    }
+
+    .dashboard-preview {
+        max-width: 300px;
+    }
+
+    .hero-actions {
         flex-direction: column;
-        gap: 8px;
-        text-align: center;
+        align-items: center;
     }
-    
-    .banner-text h2 {
-        font-size: 14px;
-    }
-    
-    .banner-text p {
-        font-size: 10px;
-    }
-    
-    body .landing-container {
-        margin-top: 80px;
+
+    .cta-button,
+    .demo-button {
+        width: 100%;
+        justify-content: center;
     }
 }
